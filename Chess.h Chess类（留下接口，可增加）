@@ -1,0 +1,68 @@
+#ifndef NETWORKSMALLGAME_PLAYER_H
+#define NETWORKSMALLGAME_PLAYER_H
+
+#include "cocos2d.h"
+#include "string"
+
+class Chess : public cocos2d::Sprite {
+public:
+
+    void AutoMove();
+    bool IfAttack();
+    void Attack();
+    void Skill();//使用技能
+    void IfDeath();
+    void Equip();//装备
+    double GetPositionX();
+    double GetPositionY();
+    bool IfTeamSpirit();
+
+protected:
+    int SpeedX;
+    int SpeedY;
+    double HP;//血量
+    double HPNow;//当前血量
+    double MP;//蓝
+    double MPNow;//当前蓝
+    double AT;//攻击力
+    double AR;//护甲值
+    double MR;//削减技能伤害幅度
+    double RA;//攻击范围
+};
+//猎人 骑士  地精  
+//战士
+class Warrior : public Chess
+{
+public:
+    virtual ATGrowth();
+};
+
+//刺客
+class Assassin : public Chess
+{
+public:
+    virtual ATGrowth();
+};
+
+//猎人
+class Hunter : public Chess
+{
+public:
+    virtual ATGrowth();
+};
+
+//骑士
+class knight : public Chess
+{
+public:
+    virtual ATGrowth();
+};
+
+//地精
+class Goblin : public Chess
+{
+public:
+    virtual ATGrowth();
+};
+
+#endif //NETWORKSMALLGAME_PLAYER_H
