@@ -2,7 +2,7 @@
 #include <cmath>
 #include "cocos2d.h"
 using namespace cocos2d;
-
+//棋子数据储存的基类
 class ChessBase
 {
 
@@ -47,42 +47,3 @@ public:
 
     bool attack(ChessBase* targetChess);
 };
-
-
-
-class ChessWithSprite:public ChessBase
-{
-public:
-    enum ChessType { noChess, firstType, secondType, thirdType };
-
-    ChessWithSprite(){}
-
-    ChessWithSprite(const ChessWithSprite& chess);
-
-    ChessWithSprite& operator=(const ChessWithSprite& chess);
-
-    ChessWithSprite(const ChessWithSprite::ChessType& type)
-    {
-        this->chessType = type;
-        this->init();
-    }
-    
-    bool setSprite(Sprite*);   
-    
-    Sprite* getSprite()const;
-    
-    bool attack(ChessWithSprite* targetChess);
-    
-    void setChessType(const ChessType& type);
-    
-    ChessType getChessType()const;
-    
-    void init();
-private:
-    ChessType chessType=noChess;
-
-    Sprite* sprite=nullptr;
-};
-
-
-
