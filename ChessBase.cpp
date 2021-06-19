@@ -75,7 +75,14 @@ bool   ChessBase::setLevel(const int& Level)
     this->level = Level;
     return 1;
 }
+bool  ChessBase::setPro(const int& pro)
 
+{
+    if (this == nullptr)
+        return 0;
+    this->Pro = pro;
+    return 1;
+}
 const int ChessBase::getLevel()const
 {
     return this->level;
