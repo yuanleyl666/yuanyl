@@ -29,10 +29,12 @@ public:
     bool setAR(const double& ar);
     bool setMR(const double& mr);
     bool setRA(const double& ra);
+    bool setPro(const int&Pro);
     bool setAttackInterval(const double &ai);
     bool setPlayer(const int& Player);
     bool setPrice(const int& Price);
     bool setLevel(const int& Level);
+    bool equip(const int& equipment)
 
     const int getLevel()const;
     const double getAttackInterval()const;
