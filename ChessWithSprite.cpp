@@ -102,7 +102,8 @@ ChessWithSprite::ChessWithSprite(const ChessWithSprite& chess)
 //just copy number
 ChessWithSprite& ChessWithSprite::operator=(const ChessWithSprite& chess)
 {
-    this->sprite->removeAllChildren();
+     if (this->sprite->getChildrenCount())
+        this->sprite->removeAllChildren();
 
     this->attackInterval = chess.attackInterval;
 
@@ -121,8 +122,9 @@ ChessWithSprite& ChessWithSprite::operator=(const ChessWithSprite& chess)
 
     if (this->chessType != 0)
     {
-        auto child = Sprite::create("HelloWorld.png");
-        this->sprite->addChild(child, 0, 0);
+        auto child = Sprite::create("res\\model\\Axe.png");
+        this->sprite->addChild(child,4, 0);
+        child->setOpacity(255);
     }
     return *this;
 };
@@ -161,8 +163,9 @@ void ChessWithSprite::init(const int level = 1)
 
     if (this->chessType != noChess)
     {
-        auto childToSet = Sprite::create(ChessInitData::SpriteInMap[chessType]);
-        this->sprite->addChild(childToSet, 0, 0);
+         auto childToSet = Sprite::create("res\\model\\Axe.png");
+        this->sprite->addChild(childToSet, 4, 0);
+        childToSet->setOpacity(255);
      
     }
     else
@@ -207,8 +210,9 @@ void ChessWithSprite::initInShop(const int level=1)
 
     if (this->chessType != noChess)
     {
-        auto childToSet = Sprite::create(ChessInitData::SpriteInShop[chessType]);
-        this->sprite->addChild(childToSet, 0, 0);
+        auto childToSet = Sprite::create("res\\model\\Axe.png");
+        this->sprite->addChild(childToSet, 4, 0);
+        childToSet->setOpacity(255);
 
     }
     else
