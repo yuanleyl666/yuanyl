@@ -11,6 +11,7 @@ namespace ChessInitData
     const double MR[21] = { 0,5,5,5,5,5,5,0,5,10,5,0,10,5,15,10,5,15,10,5,10 };
     const int RA[21] = { 0,D,D,D,3 * D,D,2 * D,2 * D,D,3 * D,5 * D,D,2 * D,3 * D,D,D,2 * D,D,3 * D,D,D };
     const int Price[21] = { 0,1,1,1,1,1,2,2,2,2,3,3,3,4,4,4,5,5,5,5,5 };
+    const int Pro[21] = {0,1,2,3,4,5,5,3,1,2,4,3,1,4,2,5,3,5,2,4,1};//1:战士，2:地精，3:刺客，4:猎人，5:骑士
     const std::string SpriteInMap[21] = { "","res\\model\\Axe .png","res\\model\\CG .png","res\\model\\BH .png","res\\model\\DR .png","res\\model\\CK .png",
                                              "res\\model\\MR .png","res\\model\\QoP .png","res\\model\\Jugg .png","res\\model\\TK .png","res\\model\\DS .png",
                                              "res\\model\\PA .png","res\\model\\TW .png","res\\model\\GG .png","res\\model\\GS .png","res\\model\\DK .png",
@@ -112,7 +113,7 @@ void ChessWithSprite::init()
     setMR(ChessInitData::MR[chessType]);
     setRA(ChessInitData::RA[chessType]);
     setPrice(ChessInitData::Price[chessType]);
-    
+    setPro(Pro[chessType]);
     if (level == 1)
     {
         setHp(ChessInitData::Hp[chessType]);
