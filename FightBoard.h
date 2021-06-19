@@ -1,21 +1,21 @@
 #pragma once
 #include "ui/CocosGUI.h"
 #include "ChessBase.h"
-#include"Menu//myMenu.h"
+#include"myMenu.h"
 #include"ChessBoard.h"
 #include"Player.h"
+#include"Shop.h"
+#include"PlayerBoard.h"
 using namespace cocos2d;
 #include <iostream>
-class ChessBoard;
-class FightBoard :
-    public ChessBoard
+class FightBoard :public ChessBoard
 {
 public:
     void attack(const int xInit, const int yInti, const int xAim, const int yAim);
 
-    //∂‘x,y¥¶µƒ∆Â◊”,—∞’“À¸œ¬“ª¥Œ“∆∂Øµƒ◊¯±Í
+    //ÂØπx,yÂ§ÑÁöÑÊ£ãÂ≠ê,ÂØªÊâæÂÆÉ‰∏ã‰∏ÄÊ¨°ÁßªÂä®ÁöÑÂùêÊ†á
     const positionOnMap findNextMove(const int xInBoard, const int yInBoard);
-    //∂‘x,y¥¶µƒ∆Â◊”,—∞’“À¸π•ª˜ƒø±Íµƒ◊¯±Í
+    //ÂØπx,yÂ§ÑÁöÑÊ£ãÂ≠ê,ÂØªÊâæÂÆÉÊîªÂáªÁõÆÊ†áÁöÑÂùêÊ†á
     const positionOnMap findPossibleAttackAim(const int xInBoard, const int yInBoard);
     void moveChess(const int xInit, const int yInit, const int xAim, const int yAim)
     {
@@ -29,7 +29,8 @@ public:
         auto moveTo = MoveTo::create(2, Vec2(xAim - xInit, yAim - yInit));
         operateSprite->runAction(moveTo);
     }
-    //
+
+    /// //////////////////////////////////////////////////////////ÈúÄË¶Å‰øÆÊîπ‰∏Ä‰∏ã
     void fight()
     {
         while (1)
@@ -38,6 +39,7 @@ public:
 
             bool player_1_lose = 1;
             bool player_2_lose = 1;
+            //Âä†ÂÖ•Êó∂Èó¥Á∫øÔºü
             for (int i = 0; i < 8; i++)
                 for (int k = 0; k < 8; k++)
                 {
@@ -75,12 +77,19 @@ public:
                 player2->setHp(player2->getHp() - 1);
                 break;
             }
-
         }
     }
-
+    void setMapSprite(Sprite* s)
+    {
+        this->mapSprite = s;
+    }
+    Sprite* getMapSprite()
+    {
+        return this->mapSprite;
+    }
     bool init(Player* p1, Player* p2)
     {
+
         auto visibleSize = Director::getInstance()->getVisibleSize();
         Vec2 origin = Director::getInstance()->getVisibleOrigin();
         this->boardScene = Scene::create();
@@ -101,6 +110,7 @@ public:
 
         this->player1 = p1;
         this->player2 = p2;
+
         for (int i = 0; i < 8; i++)
         {
             for (int k = 0; k < 8; k++)
@@ -127,8 +137,10 @@ public:
     {
         this->boardScene = toSet;
     }
+    const int  getFightWinner();
 
 private:
+    Sprite* mapSprite = nullptr;
     Scene* boardScene = nullptr;
     Player* player1 = nullptr;
     Player* player2 = nullptr;
