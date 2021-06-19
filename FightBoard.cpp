@@ -3,7 +3,7 @@ using namespace cocos2d;
 
 void FightBoard::attack(const int xInit, const int yInit, const int xAim, const int yAim)
 {
-    chess[yInit][xInit].attack(&chess[xAim][yAim]);
+    
 
 
     //需要添加攻击精灵的位置
@@ -75,6 +75,7 @@ void FightBoard::attack(const int xInit, const int yInit, const int xAim, const 
         auto spriteD = Sprite::create();
         spriteD->runAction(fadeOut);
     }
+    chess[yInit][xInit].attack(&chess[xAim][yAim]);
 }
 
 const positionOnMap FightBoard::findNextMove(const int xInBoard, const int yInBoard)
