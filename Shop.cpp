@@ -49,8 +49,7 @@ Shop::Shop(Player* player)
     //设置ui和按钮
     //创建商店的大外框
     
-    //在商店中分别放置精灵；
-    for (int i = 0; i < 5; i++)
+  for (int i = 0; i < 5; i++)
     {
         Sprite* chessSprite = nullptr;
         //设置棋子精灵
@@ -86,7 +85,7 @@ Shop::Shop(Player* player)
             if (target->getBoundingBox().containsPoint(pos))
             {
                 /* 设置精灵的透明度为100 */
-                target->setOpacity(0);
+                this->buyChess(i);
                 return true;
             }
 
@@ -106,10 +105,27 @@ Shop::Shop(Player* player)
 
 
     }
-    //设置关闭按钮
-    auto closeButton = Sprite::create("关闭");
-    this->getSprite()->addChild(closeButton);
-    //设置事件，点击调用closeShop（）
+    //设置UPDATE按钮
+    auto update = Sprite::create("update");
+    this->getSprite()->addChild(update);
+    auto listener1 = EventListenerTouchOneByOne::create();
+    listener1->setSwallowTouches(true);//设置事件吞没，避免了下游的其它监听器获取到此事件
+    // trigger when you push down
+    listener1->onTouchBegan = [=](Touch* touch, Event* event) {
+        auto target = static_cast<Sprite*>(event->getCurrentTarget());
+
+        Point pos = Director::getInstance()->convertToGL(touch->getLocationInView());
+
+        /* 判断点击的坐标是否在精灵的范围内 */
+        if (target->getBoundingBox().containsPoint(pos))
+        {
+            /* 设置精灵的透明度为100 */
+            shopUpDate(this);
+            return true;
+        }
+
+        return false;
+    };
 
 }
 
