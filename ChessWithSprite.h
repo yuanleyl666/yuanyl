@@ -23,13 +23,13 @@ public:
     ChessWithSprite& operator=(const ChessWithSprite& chess);
 
     //根据棋子的type进行构造
-    ChessWithSprite(const ChessWithSprite::ChessType& type,const int level=1) : ChessWithSprite()
+    ChessWithSprite(const ChessWithSprite::ChessType& type, const int level = 1) : ChessWithSprite()
     {
         this->level = level;
         this->chessType = type;
         this->init(level);
     }
-    
+
     //只设定棋子绑定的原精灵（透明的精灵）（基本弃用）
     bool setSprite(Sprite*);
 
@@ -37,17 +37,17 @@ public:
     Sprite* getSprite()const;
 
     //攻击
-    
+
     //需要修改攻击动画（未完成）
     bool attack(ChessWithSprite* targetChess);
 
     void setChessType(const ChessType& type);
 
     ChessType getChessType()const;
-    
+
     //根据棋子的type进行初始化并绑定对应type精灵
-    void init(const int level=1);
-    void initInShop(const int level=1);
+    void init(const int level = 1);
+    void initInShop(const int level = 1);
     //把参数的棋子换成调用的棋子并且把调用函数的棋子变为nochess
     bool changeChessToOtherChess(ChessWithSprite* chess)
     {
@@ -56,10 +56,10 @@ public:
 
         *chess = *this;
         this->chessType = noChess;
-        this->init(this->level);
+        this->init();
     }
 private:
     ChessType chessType = noChess;
 
-    Sprite* sprite=nullptr;
+    Sprite* sprite = nullptr;
 };
