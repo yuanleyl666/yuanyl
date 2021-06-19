@@ -2,24 +2,25 @@
 #include <cmath>
 #include "cocos2d.h"
 using namespace cocos2d;
-//Æå×ÓÊı¾İ´¢´æµÄ»ùÀà
+//æ£‹å­æ•°æ®å‚¨å­˜çš„åŸºç±»
 class ChessBase
 {
 
 protected:
-    int attackInterval = 0;
+
+
     int player = 0;
     int price = 0;
     int level = 0;
     bool isDead = 0;
 
-    double HP = 0;//ÑªÁ¿
-    double MP = 0;//À¶   
-    double AT = 0;//¹¥»÷Á¦
-    double AR = 0;//»¤¼×Öµ
-    double MR = 0;//Ï÷¼õ¼¼ÄÜÉËº¦·ù¶È
-    double RA = 0;//¹¥»÷·¶Î§
-
+    double HP = 0;//è¡€é‡
+    double MP = 0;//è“   
+    double AT = 0;//æ”»å‡»åŠ›
+    double AR = 0;//æŠ¤ç”²å€¼
+    double mR = 0;//å‰Šå‡æŠ€èƒ½ä¼¤å®³å¹…åº¦
+    double RA = 0;//æ”»å‡»èŒƒå›´
+    double attackInterval = 0;
 public:
 
     bool setHp(const double& hp);
@@ -28,14 +29,13 @@ public:
     bool setAR(const double& ar);
     bool setMR(const double& mr);
     bool setRA(const double& ra);
-
-    bool setAttackInterval(const int& ai);
-
+    bool setAttackInterval(const double &ai);
     bool setPlayer(const int& Player);
-
     bool setPrice(const int& Price);
+    bool setLevel(const int& Level);
 
-    const int getAttackInterval()const;
+    const int getLevel()const;
+    const double getAttackInterval()const;
     const int getPlayer()const;
     const int getPrice()const;
     const double getHP()const;
