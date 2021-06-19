@@ -1,4 +1,5 @@
-#include "ChessBase.h"
+#include"ChessBase.h"
+
 //////////////////////////////////////////////////////////////////////////////////////////
 
 bool ChessBase::setHp(const double& hp)
@@ -33,7 +34,7 @@ bool ChessBase::setMR(const double& mr)
 {
     if (this == nullptr)
         return 0;
-    this->MR = mr;
+    this->mR = mr;
     return 1;
 }
 bool ChessBase::setRA(const double& ra)
@@ -43,7 +44,7 @@ bool ChessBase::setRA(const double& ra)
     this->RA = ra;
     return 1;
 }
-bool ChessBase::setAttackInterval(const int& ai)
+bool ChessBase::setAttackInterval(const double& ai)
 {
     if (this == nullptr)
         return 0;
@@ -66,43 +67,54 @@ bool  ChessBase::setPrice(const int& Price)
     this->price = Price;
     return 1;
 }
+bool   ChessBase::setLevel(const int& Level)
 
+{
+    if (this == nullptr)
+        return 0;
+    this->level = Level;
+    return 1;
+}
 
-const int ChessBase:: getPlayer()const
+const int ChessBase::getLevel()const
+{
+    return this->level;
+}
+const int ChessBase::getPlayer()const
 {
     return this->player;
 }
-const int  ChessBase:: getPrice()const
+const int  ChessBase::getPrice()const
 {
     return this->price;
 }
-const int ChessBase::getAttackInterval()const
+const double ChessBase::getAttackInterval()const
 {
-	return attackInterval;
+    return attackInterval;
 }
 const double ChessBase::getHP()const
 {
-	return HP;
+    return HP;
 }
 const double ChessBase::getMP()const
 {
-	return MP;
+    return MP;
 }
 const double ChessBase::getAT()const
 {
-	return AT;
+    return AT;
 }
 const double ChessBase::getAR()const
 {
-	return AR;
+    return AR;
 }
 const double ChessBase::getMR()const
 {
-	return MR;
+    return mR;
 }
 const double ChessBase::getRA()const
 {
-	return RA;
+    return RA;
 }
 bool ChessBase::attack(ChessBase* targetChess)
 {
@@ -111,83 +123,4 @@ bool ChessBase::attack(ChessBase* targetChess)
     targetChess->HP -= (exp(AT - targetChess->AR) > targetChess->HP ? targetChess->HP : exp(AT - targetChess->AR));
     this->MP += 10;
     return 1;
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////
-bool ChessWithSprite::setSprite(Sprite* toSet)
-{
-    if (this == nullptr)
-        return 0;
-    this->sprite = toSet;
-    return 1;
-}
-Sprite* ChessWithSprite::getSprite()const
-{
-    return this->sprite;
-}
-bool ChessWithSprite::attack(ChessWithSprite* targetChess)
-{
-    if (this == nullptr)
-        return 0;
-    this->ChessBase::attack(targetChess);
-    return 1;
-}
-void ChessWithSprite::setChessType(const ChessType& type)
-{
-    this->chessType = type;
-}
-ChessWithSprite::ChessType ChessWithSprite::getChessType()const
-{
-    return this->chessType;
-}
-ChessWithSprite::ChessWithSprite(const ChessWithSprite& chess) 
-{
-    this->chessType = chess.chessType;
-    this->init();
-}
-ChessWithSprite& ChessWithSprite::operator=(const ChessWithSprite& chess)
-{
-    this->attackInterval = chess.attackInterval;
-    player = chess.player;
-    price = chess.price;
-    level = chess.level;
-    isDead = chess.isDead;
-
-    HP = chess.HP;//ÑªÁ¿
-    MP = chess.MP;//À¶   
-    AT = chess.AT;//¹¥»÷Á¦
-    AR = chess.AR;//»¤¼×Öµ
-    MR = chess.MR;//Ï÷¼õ¼¼ÄÜÉËº¦·ù¶È
-    RA = chess.RA;//¹¥»÷·¶Î§
-    chessType = chess.chessType;
-    return *this;
-}
-void ChessWithSprite::init()
-{
-    
-    if (chessType == firstType)
-    {
-        setHp(1);
-        setMp(1);
-        setAT(1);
-        setAR(1);
-        setMR(1);
-        setRA(1);
-        setAttackInterval(1);
-        setSprite(Sprite::create("1"));
-    }
-
-
-    else if (chessType == secondType)
-    {
-        setHp(2);
-        setMp(2);
-        setAT(2);
-        setAR(2);
-        setMR(2);
-        setRA(2);
-        setAttackInterval(2);
-        setSprite(Sprite::create("2"));
-    }
 }
