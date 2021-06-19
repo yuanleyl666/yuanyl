@@ -19,7 +19,7 @@ bool GameTimer::init(float time)
 
 	this->addChild(label);
 
-	schedule(CC_SCHEDULE_SELECTOR(GameTimer::update));
+        schedule(CC_SCHEDULE_SELECTOR(GameTimer::update),0.1f);
 
 	return true;
 }
@@ -30,7 +30,7 @@ void GameTimer::update(float delta)
 	bool player_2_lose = 1;
 	pTime -= delta;
 	char* mtime = new char[10];
-	//此处只是显示分钟数和秒数  自己可以定义输出时间格式
+	//姝ゅ鍙槸鏄剧ず鍒嗛挓鏁板拰绉掓暟  鑷繁鍙互瀹氫箟杈撳嚭鏃堕棿鏍煎紡
 	sprintf(mtime, "%d", (int)pTime);
 	label->setString(mtime);
 	fightboard->act(player_1_lose, player_2_lose);
