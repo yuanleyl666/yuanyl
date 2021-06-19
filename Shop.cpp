@@ -1,16 +1,39 @@
 #include"Shop.h"
 using namespace cocos2d;
-
+namespace ChessInitData
+{
+    const std::string SpriteInMap[31] = { "","res\\model\\Axe.png","res\\model\\CG.png","res\\model\\BH.png","res\\model\\DR.png","res\\model\\CK.png",
+                                              "res\\model\\MR.png","res\\model\\QoP.png","res\\model\\Jugg.png","res\\model\\TK.png","res\\model\\DS.png",
+                                              "res\\model\\PA.png","res\\model\\TW.png","res\\model\\GG.png","res\\model\\GS.png","res\\model\\DK.png",
+                                              "res\\model\\TA.png","res\\model\\DRK.png","res\\model\\GT.png","res\\model\\TH.png","res\\model\\COCO.png",
+                                              "res\\model\\M1.png","res\\model\\M2.png","res\\model\\M3.png","res\\model\\M4.png","res\\model\\M5.png",
+                                              "res\\model\\M6.png","res\\model\\M7.png","res\\model\\M8.png","res\\model\\M9.png","res\\model\\M10.png" };
+    const std::string SpriteInShop[21] = { "","res\\shop\\Axe_SHOP.png","res\\shop\\CG_SHOP.png","res\\shop\\BH_SHOP.png","res\\shop\\DR_SHOP.png","res\\shop\\CK_SHOP.png",
+                                             "res\\shop\\MR_SHOP.png","res\\shop\\QoP_SHOP.png","res\\shop\\Jugg_SHOP.png","res\\shop\\TK_SHOP.png","res\\shop\\DS_SHOP.png",
+                                             "res\\shop\\PA_SHOP.png","res\\shop\\TW_SHOP.png","res\\shop\\GG_SHOP.png","res\\shop\\GS_SHOP.png","res\\shop\\DK_SHOP.png",
+                                             "res\\shop\\TA_SHOP.png","res\\shop\\DRK_SHOP.png","res\\shop\\GT_SHOP.png","res\\shop\\TH_SHOP.png","res\\shop\\COCO_SHOP.png" };
+}
 
 Shop::Shop(Player* player)
 {
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    
+
+
     this->whoOpenThis = player;
-    this->setSprite(Sprite::create("res\\shop.png"));
-    this->getSprite()->setPosition(100, 50);
     player->setShop(this);
-    player->getSprite()->addChild(this->getSprite());
 
 
+    this->setSprite(Sprite::create("res\\shop.png"));
+    //this->getSprite()->setIgnoreAnchorPointForPosition(1);
+    //this->getSprite()->setAnchorPoint(Vec2(0,0));
+    //this->getPlayer()->getSecondScene()->addChild(this->getSprite());
+    this->getSprite()->setPosition(Vec2(190, 10));
+      
+    player->getSprite()->addChild(this->getSprite(),1);
+    
     static int pool[21] = { 0,20,20,20,20,20,20,20,20,20,15,15,15,15,15,15,10,10,10,10,10 };//默认卡池参数
 
     for (int i = 0; i < 5; i++)
@@ -42,97 +65,109 @@ Shop::Shop(Player* player)
             draw = 16 + rand() & 5;
         }
         pool[draw]--;//卡池数减一
+
         ChessLibrary[i].setChessType(ChessWithSprite::ChessType::Axe);
-        ChessLibrary[i].initInShop();
+
+        ChessLibrary[i].initInShop(1);
     }
-
+  
     //设置ui和按钮
-    //创建商店的大外框
+    //auto shopframe = Sprite::create("res\\shop.png");
 
+    //设置btn的位置
+    //shopframe->setPosition(Vec2(300, 0));
+
+    //this->getPlayer()->getPlayerBoard()->getBoardScene()->addChild(shopframe, 1);
+    //创建商店的大外框
+    //this->setSprite(Sprite::create("res\\shop.png"));
+    //在商店中分别放置精灵；
     for (int i = 0; i < 5; i++)
     {
-        Sprite* chessSprite = nullptr;
         //设置棋子精灵
-        if (this->ChessLibrary[i].getSprite()->getChildrenCount())
-        {
-            chessSprite = static_cast<Sprite*>(this->ChessLibrary[i].getSprite()->getChildByTag(0));
-        }
-        else
-        {
-            chessSprite = this->ChessLibrary[i].getSprite();
-        }
+        auto chessSprite = this->ChessLibrary[i].getSprite();
+
         //把chessSprite显示上去
-        chessSprite->setPosition(Vec2(i * 100, 200));
+        chessSprite->setOpacity(255);
+        //chessSprite->setIgnoreAnchorPointForPosition(1);
+        //chessSprite->setAnchorPoint(Vec2(0, 0));
+        chessSprite->setScale(0.6);
+        chessSprite->setPosition(Vec2(i * 40+160, 40));
+       
 
-        //设置按钮，不一定非要是精灵，可以是其他类，只要能调用购买就行
-        //显示、设置点击事件，点击调用this-》buychess（i）
-         //创建button对象
-        auto buyButton = ChessLibrary[i].getSprite()->getChildByTag(0);
+        this->getPlayer()->getSecondScene()->addChild(chessSprite, 2);
 
-        //设置btn的位置
-        buyButton->setPosition(Vec2(300, 200));
-
-        this->getSprite()->addChild(buyButton, 1);
         auto listener1 = EventListenerTouchOneByOne::create();
+
         listener1->setSwallowTouches(true);//设置事件吞没，避免了下游的其它监听器获取到此事件
+        
         // trigger when you push down
-        listener1->onTouchBegan = [=](Touch* touch, Event* event) {
-            auto target = static_cast<Sprite*>(event->getCurrentTarget());
+        //listener1->onTouchBegan = [&,i](Touch* touch, Event* event) 
+        //{
+        //    
+        //    auto target = static_cast<Sprite*>(event->getCurrentTarget());
 
-            Point pos = Director::getInstance()->convertToGL(touch->getLocationInView());
+        //    Point pp;
+        //    pp = target->getPosition();
 
-            /* 判断点击的坐标是否在精灵的范围内 */
-            if (target->getBoundingBox().containsPoint(pos))
+        //    Point pos = Director::getInstance()->convertToGL(touch->getLocationInView());
+        //    log("%d", pp.x);
+        //    log("%d", pp.y);
+        //    /* 判断点击的坐标是否在精灵的范围内 */
+        //    if (target->getBoundingBox().containsPoint(pos))
+        //    {
+        //       
+        //      if(! this->buyChess(i))
+        //          log("sb");
+        //      else  log("bought");
+        //        return true;
+        //    }
+
+        //    return false;
+        //};
+        listener1->onTouchBegan = [i,this](Touch* touch, Event* event) {
+            auto targetA = static_cast<Sprite*>(event->getCurrentTarget());
+            //pos_org = targetA->getPosition();
+           
+            Point locationInNode = targetA->getParent()->convertToNodeSpace(touch->getLocation());
+            Size s = targetA->getContentSize();
+            Rect rect = Rect(0, 0, s.width, s.height);
+            log("Node");
+            log("%d", locationInNode.x);
+            log("%d", locationInNode.y);
+            if (rect.containsPoint(locationInNode))
             {
-               // /* 设置精灵的透明度为 */
-                this->buyChess(i);
+                //log("sprite began... x = %f, y = %f", locationInNode.x, locationInNode.y);
+                //targetA->setOpacity(160);
+                if (!this->buyChess(i))
+                    log("sb");
+                else
+                    log("bought");
                 return true;
             }
-
             return false;
         };
         // trigger when you let up
+
         listener1->onTouchEnded = [](Touch* touch, Event* event) {
+            // your code
+            CCLOG("进入ended");
         };
         /* 注册监听事件，绑定精灵1 */
-        this->getPlayer()->getPlayerBoard()->getBoardScene()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener1, buyButton);
+        this->getPlayer()->getSecondScene()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener1, chessSprite );
 
         //
-        this->getSprite()->addChild(buyButton, 0, i + 5);
+        //log("%d", chessSprite);
+        //this->getSprite()->addChild(buyButton, 0, i + 5);
 
 
 
     }
-    //设置UPDATE按钮
-    auto updateButton = Sprite::create("res//shop//freshen.png");
-    updateButton->setPosition(300, 50);
-    this->getSprite()->addChild(updateButton);
-    auto listener2 = EventListenerTouchOneByOne::create();
-    listener2->setSwallowTouches(true);//设置事件吞没，避免了下游的其它监听器获取到此事件
-    // trigger when you push down
-    listener2->onTouchBegan = [=](Touch* touch, Event* event) {
-        auto target = static_cast<Sprite*>(event->getCurrentTarget());
+    //设置关闭按钮
+    auto updateButton = Sprite::create("res\\shop.png");
+    updateButton->setOpacity(0);
+    this->getSprite()->addChild(updateButton, 0, -1);
+    //设置事件，点击调用closeShop（）
 
-        Point pos = Director::getInstance()->convertToGL(touch->getLocationInView());
-
-        /* 判断点击的坐标是否在精灵的范围内 */
-        if (target->getBoundingBox().containsPoint(pos))
-        {
-            /* 设置精灵的透明度为100 */
-            shopUpDate(this);
-            return true;
-        }
-
-        return false;
-    };
-    // trigger when you let up
-    listener2->onTouchEnded = [](Touch* touch, Event* event) {
-    };
-    /* 注册监听事件，绑定精灵1 */
-    this->getPlayer()->getPlayerBoard()->getBoardScene()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener2, updateButton);
-
-    //这里的i+5需要处理
-    this->getSprite()->addChild(updateButton, 0);
 }
 
 void Shop::setSprite(Sprite* toSet)
@@ -153,20 +188,16 @@ bool Shop::buyChess(const int rank)
         {
 
             reseverIsFull = 0;
-            //扣除玩家金币
+
             this->whoOpenThis->setGold(this->whoOpenThis->getGold() - this->ChessLibrary[rank].getPrice());
-
-            //ui        不一定需要
+            this->whoOpenThis->setReserve(i, &this->ChessLibrary[rank]);
             //
-            //
-
-
-            this->ChessLibrary[rank].changeChessToOtherChess(this->whoOpenThis->getReserve(i));
             break;
         }
     }
     if (reseverIsFull)
         return 0;
+    //扣除玩家金币
 
     return 1;
 }
@@ -193,11 +224,10 @@ void shopUpDate(Shop* shop)
 {
     auto player = shop->getPlayer();
     shop->closeShop();
-    CC_SAFE_DELETE(shop);
+    delete shop;
     Shop* _shop = new Shop(player);
-    player->getSprite()->addChild(shop->getSprite(), 0, 1);
+    player->getSprite()->addChild(shop->getSprite(), 2, 1);
 }
-
 Sprite* Shop::getSprite()
 {
     return this->shopSprite;
