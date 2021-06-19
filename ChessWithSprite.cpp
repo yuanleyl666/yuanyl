@@ -105,7 +105,7 @@ ChessWithSprite& ChessWithSprite::operator=(const ChessWithSprite& chess)
     }
     return *this;
 };
-void ChessWithSprite::init()
+void ChessWithSprite::init(const int level = 1)
 {
     //数据初始化
     setMp(0);
@@ -113,7 +113,7 @@ void ChessWithSprite::init()
     setMR(ChessInitData::MR[chessType]);
     setRA(ChessInitData::RA[chessType]);
     setPrice(ChessInitData::Price[chessType]);
-    setPro(Pro[chessType]);
+    this->level = level;
     if (level == 1)
     {
         setHp(ChessInitData::Hp[chessType]);
@@ -152,7 +152,7 @@ void ChessWithSprite::init()
 }
 
 
-void ChessWithSprite::initInShop()
+void ChessWithSprite::initInShop(const int level=1)
 {
     //数据初始化
     setMp(0);
@@ -160,6 +160,7 @@ void ChessWithSprite::initInShop()
     setMR(ChessInitData::MR[chessType]);
     setRA(ChessInitData::RA[chessType]);
     setPrice(ChessInitData::Price[chessType]);
+    this->level = level;
     this->player = 0;
     if (level == 1)
     {
@@ -194,4 +195,3 @@ void ChessWithSprite::initInShop()
     }
 
 }
-
