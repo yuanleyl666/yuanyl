@@ -1,10 +1,9 @@
 #pragma once
 #include "ui/CocosGUI.h"
 #include "ChessBase.h"
-#include"Menu//myMenu.h"
+#include"ChessWithSprite.h"
 using namespace cocos2d;
-class ChessWithSprite;
-#include <iostream>
+
 
 class ChessBoard
 {
@@ -15,14 +14,10 @@ public:
         return &chess[row][column];
     }
 
-    //set进的chess的精灵需要重新载入；
+    //set杩涚殑chess鐨勭簿鐏甸渶瑕侀噸鏂拌浇鍏ワ紱
     virtual bool setChess(const int& row, const int& column, ChessWithSprite* chessToSet)
     {
         chessToSet->changeChessToOtherChess(&this->chess[row][column]);
-        /// //////////////////////
-
-        //ui
-        this->chess[row][column].getSprite()->getChildren().at(0)->setScale(100);
         return 1;
     }
 
@@ -34,6 +29,13 @@ struct positionOnMap
 {
     int x = -1;
     int y = -1;
+    positionOnMap& operator=(const positionOnMap& position)
+    {
+        this->x = position.x;
+        this->y = position.y;
+        return *this;
+
+    }
     const bool operator==(const positionOnMap& p)const
     {
         return x == p.x && y == p.y;
