@@ -6,22 +6,18 @@ const int Player::getPlayerRank()const
 {
     return this->playerRank;
 }
-
 const int  Player::getExp()const
 {
     return this->exp;
 }
-
 const int  Player::getLevel()const
 {
     return this->level;
 }
-
 const int  Player::getGold()const
 {
     return this->gold;
 }
-
 const int  Player::getHp()const
 {
     return this->hp;
@@ -35,7 +31,6 @@ bool  Player::setPlayerRank(const int playerRank)
     this->playerRank = playerRank;
     return 1;
 }
-
 bool  Player::setExp(const int exp)
 {
     if (this == nullptr)
@@ -43,7 +38,6 @@ bool  Player::setExp(const int exp)
     this->exp = exp;
     return 1;
 }
-
 bool  Player::setLevel(const int Level)
 {
     if (this == nullptr)
@@ -51,7 +45,6 @@ bool  Player::setLevel(const int Level)
     this->level = Level;
     return 1;
 }
-
 bool  Player::setGold(const int Gold)
 {
     if (this == nullptr)
@@ -72,12 +65,19 @@ ChessWithSprite* Player::getReserve(const int i)
 {
     return &this->ChessReserve[i];
 }
-
 bool Player::setReserve(const int i, ChessWithSprite* toSet)
 {
-    if (this->ChessReserve[i].getChessType() == ChessWithSprite::ChessType::noChess)
-        return 0;
+     if (this->ChessReserve[i].getChessType() != ChessWithSprite::ChessType::noChess || toSet == nullptr)
+        return 0;   
     toSet->changeChessToOtherChess(&this->ChessReserve[i]);
+
+    this->getPlayerBoard()->getBoardScene()->addChild(this->ChessReserve[i].getSprite());
+    //
+    this->getReserve(i)->getSprite()->setPosition(Vec2(172 + i * 16, 76));
+
+    //
+
+
     toSet->setPlayer(this->playerRank);
 
 }
@@ -86,7 +86,6 @@ Shop* Player::getShop()
 {
     return this->ShopOpened;
 }
-
 void Player::setShop(Shop* toSet)
 {
     this->ShopOpened = toSet;
@@ -96,25 +95,30 @@ Sprite* Player::getSprite()const
 {
     return this->PlayerSprite;
 }
-
 bool Player::setSprite(Sprite* sp)
 {
     this->PlayerSprite = sp;
     return 1;
 }
-
 void  Player::openShop()
 {
     Player* playerPoint = this;
-    Shop* toOpen = new Shop((Player*)(playerPoint));
-}
+    Shop* toOpen = new Shop(playerPoint);
 
+}
 void Player::setPlayerBoard(PlayerBoard* toSet)
 {
     this->board = toSet;
 }
-
 PlayerBoard* Player::getPlayerBoard()
 {
     return this->board;
+}
+void Player::setSecondScene(MySecondScene* toSet)
+{
+    this->secondscene = toSet;
+}
+MySecondScene* Player::getSecondScene()
+{
+    return this->secondscene;
 }
