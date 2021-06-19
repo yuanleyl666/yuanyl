@@ -47,8 +47,8 @@ public:
     ChessType getChessType()const;
     
     //根据棋子的type进行初始化并绑定对应type精灵
-    void init();
-    void initInShop();
+     void init(const int level);
+    void initInShop(const int level);
     //把参数的棋子换成调用的棋子并且把调用函数的棋子变为nochess
     bool changeChessToOtherChess(ChessWithSprite* chess)
     {
