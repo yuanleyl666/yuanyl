@@ -24,6 +24,14 @@
 
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
+#include "ChessBoard.h"
+#include"Start_scene.h"
+#include"myMenu.h"
+#include"FirstScene.h"
+#include"SecondScene.h"
+#include "FightBoard.h"
+#include "PlayerBoard.h"
+#include "Player.h"
 
 // #define USE_AUDIO_ENGINE 1
 
@@ -55,7 +63,6 @@ AppDelegate::~AppDelegate()
 void AppDelegate::initGLContextAttrs()
 {
     // set OpenGL context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
-    //设置OpenGL上下文属性：红色、绿色、蓝色、alpha、深度、模具、多样本计数
     GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8, 0};
 
     GLView::setGLContextAttrs(glContextAttrs);
@@ -63,8 +70,6 @@ void AppDelegate::initGLContextAttrs()
 
 // if you want to use the package manager to install more packages,  
 // don't modify or remove this function
-//如果要使用软件包管理器安装更多软件包，
-//不要修改或删除此函数
 static int register_all_packages()
 {
     return 0; //flag for packages manager
@@ -76,47 +81,60 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto glview = director->getOpenGLView();
     if(!glview) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-        glview = GLViewImpl::createWithRect("Helloworld", cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+        glview = GLViewImpl::createWithRect("autoChess", cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
 #else
-        glview = GLViewImpl::create("Helloworld");
+        glview = GLViewImpl::create("autoChess");
 #endif
         director->setOpenGLView(glview);
     }
-
-    // turn on display FPS  启用显示FPS
+    glview->setFrameSize(1227, 1282);
+    director->setOpenGLView(glview);
+    // turn on display FPS
     director->setDisplayStats(true);
 
-    // set FPS. the default value is 1.0/60 if you don't call this   设置FPS。如果不调用此函数，则默认值为1.0/60
-
+    // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0f / 60);
 
     // Set the design resolution
     glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::NO_BORDER);
     auto frameSize = glview->getFrameSize();
+    
     // if the frame's height is larger than the height of medium size.
+    
+    
+    
     if (frameSize.height > mediumResolutionSize.height)
     {        
         director->setContentScaleFactor(MIN(largeResolutionSize.height/designResolutionSize.height, largeResolutionSize.width/designResolutionSize.width));
     }
+    
     // if the frame's height is larger than the height of small size.
+    
     else if (frameSize.height > smallResolutionSize.height)
     {        
         director->setContentScaleFactor(MIN(mediumResolutionSize.height/designResolutionSize.height, mediumResolutionSize.width/designResolutionSize.width));
     }
+    
     // if the frame's height is smaller than the height of medium size.
+    
     else
     {        
         director->setContentScaleFactor(MIN(smallResolutionSize.height/designResolutionSize.height, smallResolutionSize.width/designResolutionSize.width));
     }
 
     register_all_packages();
-
     // create a scene. it's an autorelease object
-    //auto scene = HelloWorld::createScene();
-    auto scene = HelloWorld::createScene();
+    /*ChessWithSprite C1(ChessWithSprite::ChessType::Axe);
+    ChessWithSprite C2(ChessWithSprite::ChessType::Axe);*/
+  
+ 
 
-    // run
-    director->runWithScene(scene);
+
+    Scene* runscene = MySecondScene::createScene();
+    //runscene->addChild(scene);
+    director->runWithScene(runscene);
+
+    
 
     return true;
 }
