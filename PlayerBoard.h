@@ -10,8 +10,8 @@ class myMenu;
 class PlayerBoard :public ChessBoard
 {
 public:
-    myMenu* getBoardScene();
-    void setBoardScene(myMenu*);
+    Scene* getBoardScene();
+    void setBoardScene(Scene*);
      Player* getPlayer();
     void setPlayer(Player*);
     void setMap(Sprite* map)
@@ -27,7 +27,7 @@ public:
 
 private:
     Sprite* MapSprite = nullptr;
-    myMenu* boardScene = nullptr;
+   Scene* boardScene = nullptr;
     Player* player = nullptr;
 
 };
