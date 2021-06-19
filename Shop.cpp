@@ -220,14 +220,41 @@ void Shop::setPlayer(Player* toSet)
     this->whoOpenThis = toSet;
 }
 
-void shopUpDate(Shop* shop)
+void shopUpDate(Shop* shop,int pool[21])
 {
-    auto player = shop->getPlayer();
-    shop->closeShop();
-    delete shop;
-    Shop* _shop = new Shop(player);
-    player->getSprite()->addChild(shop->getSprite(), 2, 1);
+    for (int i = 0; i < 5; i++)
+    {
+        int draw;//抽取到的棋子（标号）
+        int rate = 1 + rand() % 100;
+        const int Rate[4][10] = { {100,70 ,60, 50, 40, 30, 25, 20,15,10},//各等级抽取棋子概率
+                                  {100,100,90, 80, 70, 65, 55, 50,35,25},
+                                  {100,100,100,95, 90, 85, 80, 80,60,50},
+                                  {100,100,100,100,100,95, 90, 85,80,75} };
+        if (rate <= Rate[0][shop->whoOpenThis->getLevel() - 1])
+        {
+            draw = 1 + rand() % 5;
+        }
+        else if (rate <= Rate[1][shop->whoOpenThis->getLevel() - 1])
+        {
+            draw = 6 + rand() % 4;
+        }
+        else if (rate <= Rate[2][shop->whoOpenThis->getLevel() - 1])
+        {
+            draw = 10 + rand() % 3;
+        }
+        else if (rate <= Rate[3][shop->whoOpenThis->getLevel() - 1])
+        {
+            draw = 13 + rand() % 3;
+        }
+        else
+        {
+            draw = 16 + rand() & 5;
+        }
+        pool[draw]--;//卡池数减一
+        shop->ChessLibrary[i]=ChessWithSprite(ChessWithSprite::ChessType::Axe);
+    }
 }
+
 Sprite* Shop::getSprite()
 {
     return this->shopSprite;
