@@ -5,52 +5,58 @@ void FightBoard::attack(const int xInit, const int yInit, const int xAim, const 
 {
     chess[yInit][xInit].attack(&chess[xAim][yAim]);
     //通过chesstype判断攻击类型
-   // switch (this->chess[yInit][xInit].ChessWithSprite::getChessType())
-   // {
-   //     case 0:
-   //         break;
-   //     case 1:
-   //         //攻击动画（上侧）
-   //         auto spriteB = Sprite::create("/res/atk.png");
-   //         spriteB->setScale(0.1);
-   //         spriteB->setPosition(100, 100);
-   //         spriteB->setRotation(-70.0f);
-   //         //this->getSprite()->getParent()代表场景的this指针
-   //         this->chess[yInit][xInit].getSprite()->getParent()->addChild(spriteB);
-   //         auto rotateTo = RotateBy::create(0.6f, -30.0f);
-   //         auto seq = Sequence::create(rotateTo, rotateTo->reverse(), nullptr);
-   //         spriteB->runAction(seq);
-   //         break;
-   //     case 2:
-   //         //攻击动画（下侧）
-   //         auto spriteB = Sprite::create("/res/atk.png");
-   //         spriteB->setScale(0.1);
-   //         spriteB->setPosition(100, 100);
-   //         spriteB->setRotation(-15.0f);
-   //         //this->getSprite()->getParent()代表场景的this指针
-   //         this->chess[yInit][xInit].getSprite()->getParent()->addChild(spriteB);
-   ////         auto rotateTo = RotateBy::create(0.6f, 30.0f);
-   //     //    auto seq = Sequence::create(rotateTo, rotateTo->reverse(), nullptr);
-   //   //      spriteB->runAction(seq);
-   //         break;
-   //     case 3:
-   //         //远程攻击
-   //         auto moveTo = MoveTo::create(4, Vec2(300, 300));
-   //         auto emitter = ParticleFire::create();//火焰
-   //         emitter->setScale(0.15);
-   //         emitter->setPosition(50, 50);
-   //         this->chess[yInit][xInit].getSprite()->getParent()->addChild(spriteB);
-   //         emitter->runAction(moveTo);
-   //         break;
-   //     case 4:
-   //         //技能特效
-   //         auto emitter6 = ParticleExplosion::create();//爆炸
-   //         emitter6->setScale(0.5);
-   //         emitter6->setPosition(50, 50);
-   //         this->chess[yInit][xInit].getSprite()->getParent()->addChild(spriteB);
-   //         emitter6->runAction(moveTo);
-   //         break;
-   // }
+   //攻击动画（上侧）
+    auto spriteA = Sprite::create("/res/atk.png");
+    spriteA->setScale(0.1);
+    spriteA->setPosition(100, 100);
+    spriteA->setRotation(-70.0f);
+    //this->getSprite()->getParent()代表场景的this指针
+    this->chess[yInit][xInit].getSprite()->getParent()->addChild(spriteA);
+    auto rotateToA = RotateBy::create(0.6f, -30.0f);
+    auto seqA = Sequence::create(rotateToA, rotateToA->reverse(), nullptr);
+    //攻击动画（下侧）
+    auto spriteB = Sprite::create("/res/atk.png");
+    spriteB->setScale(0.1);
+    spriteB->setPosition(100, 100);
+    spriteB->setRotation(-15.0f);
+    //this->getSprite()->getParent()代表场景的this指针
+    this->chess[yInit][xInit].getSprite()->getParent()->addChild(spriteB);
+    auto rotateToB = RotateBy::create(0.6f, 30.0f);
+    auto seqB = Sequence::create(rotateToB, rotateToB->reverse(), nullptr);
+    //远程攻击
+    auto moveTo = MoveTo::create(4, Vec2(300, 300));
+    auto emitter = ParticleFire::create();//火焰
+    emitter->setScale(0.15);
+    emitter->setPosition(50, 50);
+    this->chess[yInit][xInit].getSprite()->getParent()->addChild(spriteB);
+    // 技能特效
+    auto emitter6 = ParticleExplosion::create();//爆炸
+    emitter6->setScale(0.5);
+    emitter6->setPosition(50, 50);
+    this->chess[yInit][xInit].getSprite()->getParent()->addChild(spriteB);
+    //通过chesstype判断攻击类型
+    switch (this->chess[yInit][xInit].ChessWithSprite::getChessType())
+    {
+
+    case 0:
+        break;
+    case 1:
+        //攻击动画（上侧）
+        spriteA->runAction(seqA);
+        break;
+    case 2:
+        //攻击动画（下侧）
+        spriteB->runAction(seqB);
+        break;
+    case 3:
+        //远程攻击
+        emitter->runAction(moveTo);
+        break;
+    case 4:
+        // 技能特效
+        emitter6->runAction(moveTo);
+        break;
+    }
 
     /// <summary>/////////////////////
     if (chess[xAim][yAim].getHP() < 1e-3)
