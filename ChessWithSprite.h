@@ -11,9 +11,7 @@ class ChessWithSprite :public ChessBase
 public:
     ChessWithSprite()
     {
-        //这里应该把精灵换全透明
-        this->sprite = Sprite::create("HelloWorld.png");
-       this-> sprite->setOpacity(0);
+
     }
     //需要更改数据
     enum ChessType { noChess, Axe, CG, BH, DR, CK, MR, QoP, Jugg, TK, DS, PA, TW, GG, GS, DK, TA, DRK, GT, TH, COCO };
@@ -25,10 +23,11 @@ public:
     ChessWithSprite& operator=(const ChessWithSprite& chess);
 
     //根据棋子的type进行构造
-    ChessWithSprite(const ChessWithSprite::ChessType& type) : ChessWithSprite()
+    ChessWithSprite(const ChessWithSprite::ChessType& type,const int level=1) : ChessWithSprite()
     {
+        this->level = level;
         this->chessType = type;
-        this->init();
+        this->init(level);
     }
     
     //只设定棋子绑定的原精灵（透明的精灵）（基本弃用）
@@ -47,8 +46,8 @@ public:
     ChessType getChessType()const;
     
     //根据棋子的type进行初始化并绑定对应type精灵
-     void init(const int level);
-    void initInShop(const int level);
+    void init(const int level=1);
+    void initInShop(const int level=1);
     //把参数的棋子换成调用的棋子并且把调用函数的棋子变为nochess
     bool changeChessToOtherChess(ChessWithSprite* chess)
     {
@@ -56,13 +55,11 @@ public:
             return 0;
 
         *chess = *this;
-
-        this->sprite->removeAllChildren();
         this->chessType = noChess;
-        this->init();
+        this->init(this->level);
     }
 private:
     ChessType chessType = noChess;
 
-    Sprite* sprite;
+    Sprite* sprite=nullptr;
 };
