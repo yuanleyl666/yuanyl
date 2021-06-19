@@ -251,7 +251,9 @@ void shopUpDate(Shop* shop,int pool[21])
             draw = 16 + rand() & 5;
         }
         pool[draw]--;//卡池数减一
-        shop->ChessLibrary[i]=ChessWithSprite(ChessWithSprite::ChessType::Axe);
+       
+        shop->ChessLibrary[i].setChessType(static_cast<ChessWithSprite::ChessType>(draw));
+        ChessLibrary[i].initInShop;
     }
 }
 
