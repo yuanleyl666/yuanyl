@@ -43,19 +43,19 @@ Shop::Shop(Player* player)
         }
         pool[draw]--;//卡池数减一
         ChessLibrary[i].setChessType(ChessWithSprite::ChessType::Axe);
-        ChessLibrary[i].init();
+        ChessLibrary[i].initInShop();
     }
- 
+
     //设置ui和按钮
     //创建商店的大外框
-    
-  for (int i = 0; i < 5; i++)
+
+    for (int i = 0; i < 5; i++)
     {
         Sprite* chessSprite = nullptr;
         //设置棋子精灵
         if (this->ChessLibrary[i].getSprite()->getChildrenCount())
         {
-            chessSprite = static_cast<Sprite * >(this->ChessLibrary[i].getSprite()->getChildByTag(0));
+            chessSprite = static_cast<Sprite*>(this->ChessLibrary[i].getSprite()->getChildByTag(0));
         }
         else
         {
@@ -67,7 +67,7 @@ Shop::Shop(Player* player)
         //设置按钮，不一定非要是精灵，可以是其他类，只要能调用购买就行
         //显示、设置点击事件，点击调用this-》buychess（i）
          //创建button对象
-        auto buyButton = Sprite::create("res\\shop\\BH_SHOP.png");
+        auto buyButton = ChessLibrary[i].getSprite()->getChildByTag(0);
 
         //设置btn的位置
         buyButton->setPosition(Vec2(300, 200));
@@ -84,7 +84,7 @@ Shop::Shop(Player* player)
             /* 判断点击的坐标是否在精灵的范围内 */
             if (target->getBoundingBox().containsPoint(pos))
             {
-                /* 设置精灵的透明度为100 */
+               // /* 设置精灵的透明度为 */
                 this->buyChess(i);
                 return true;
             }
@@ -93,8 +93,6 @@ Shop::Shop(Player* player)
         };
         // trigger when you let up
         listener1->onTouchEnded = [](Touch* touch, Event* event) {
-            // your code
-            CCLOG("进入ended");
         };
         /* 注册监听事件，绑定精灵1 */
         this->getPlayer()->getPlayerBoard()->getBoardScene()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener1, buyButton);
@@ -106,12 +104,13 @@ Shop::Shop(Player* player)
 
     }
     //设置UPDATE按钮
-    auto update = Sprite::create("update");
-    this->getSprite()->addChild(update);
-    auto listener1 = EventListenerTouchOneByOne::create();
-    listener1->setSwallowTouches(true);//设置事件吞没，避免了下游的其它监听器获取到此事件
+    auto updateButton = Sprite::create("res//shop//freshen.png");
+    updateButton->setPosition(300, 50);
+    this->getSprite()->addChild(updateButton);
+    auto listener2 = EventListenerTouchOneByOne::create();
+    listener2->setSwallowTouches(true);//设置事件吞没，避免了下游的其它监听器获取到此事件
     // trigger when you push down
-    listener1->onTouchBegan = [=](Touch* touch, Event* event) {
+    listener2->onTouchBegan = [=](Touch* touch, Event* event) {
         auto target = static_cast<Sprite*>(event->getCurrentTarget());
 
         Point pos = Director::getInstance()->convertToGL(touch->getLocationInView());
@@ -126,7 +125,14 @@ Shop::Shop(Player* player)
 
         return false;
     };
+    // trigger when you let up
+    listener2->onTouchEnded = [](Touch* touch, Event* event) {
+    };
+    /* 注册监听事件，绑定精灵1 */
+    this->getPlayer()->getPlayerBoard()->getBoardScene()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener2, updateButton);
 
+    //这里的i+5需要处理
+    this->getSprite()->addChild(updateButton, 0);
 }
 
 void Shop::setSprite(Sprite* toSet)
@@ -161,7 +167,7 @@ bool Shop::buyChess(const int rank)
     }
     if (reseverIsFull)
         return 0;
-  
+
     return 1;
 }
 void Shop::closeShop()
