@@ -48,9 +48,9 @@ bool ChessWithSprite::setSprite(Sprite* toSet)
 {
     if (this == nullptr)
         return 0;
-    
+
     this->sprite;
-    
+
     return 1;
 }
 Sprite* ChessWithSprite::getSprite()const
@@ -61,11 +61,11 @@ Sprite* ChessWithSprite::getSprite()const
 
 bool ChessWithSprite::attack(ChessWithSprite* targetChess)
 {
-    if (this == nullptr||targetChess==nullptr)
+    if (this == nullptr || targetChess == nullptr)
         return 0;
-    
+
     //donghua
-    
+
     this->ChessBase::attack(targetChess);
 
     if (targetChess->getHP() < 1e-3)
@@ -122,13 +122,13 @@ ChessWithSprite& ChessWithSprite::operator=(const ChessWithSprite& chess)
     AR = chess.AR;//护甲值
     mR = chess.mR;//削减技能伤害幅度
     RA = chess.RA;//攻击范围
-    
+
 
     return *this;
 };
 
 
-void ChessWithSprite::init(const int level )
+void ChessWithSprite::init(const int level)
 {
     //数据初始化
     setMp(0);
@@ -151,9 +151,9 @@ void ChessWithSprite::init(const int level )
     if (this->chessType != noChess)
     {
 
-        this->sprite = Sprite::create(ChessInitData::SpriteInMap[chessType]);   
+        this->sprite = Sprite::create(ChessInitData::SpriteInMap[chessType]);
     }
- 
+
 
 }
 
@@ -186,4 +186,3 @@ void ChessWithSprite::initInShop(const int level)
 
 
 }
-
