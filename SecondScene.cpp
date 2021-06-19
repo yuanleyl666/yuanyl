@@ -1,5 +1,6 @@
 #include"SecondScene.h"
 #include"FirstScene.h"
+#include "FightBoard.h"
 #include<iostream>
 #include "cocos-ext.h"
 #include "ui/UIScale9Sprite.h"
@@ -10,12 +11,14 @@ using namespace cocos2d::extension;
 USING_NS_CC;
 USING_NS_CC_EXT;
 
-Point pos, posA;
+//Sprite* targetA;
+//Point pos, posA;
+//int x, y;
 
 Scene* MySecondScene::createScene()
 {
-	Scene* scene = Scene::create();
-	MySecondScene* layer = MySecondScene::create();
+    auto scene = Scene::create();
+	auto layer = MySecondScene::create();
 	scene->addChild(layer);
 	return scene;
 }
@@ -66,8 +69,8 @@ static void problemLoading(const char* filename)
 //
 //    auto spriteA = Sprite::create("res\\model\\CG.png");
 //    spriteA->setScale(2);
-//    spriteA->setPosition(177, 100);//ÉèÖÃÕâ¸ö¾«ÁéÔÚÆÁÄ»µÄÎ»ÖÃ
-//    this->addChild(spriteA);//°ÑÕâ¸ö¾«ÁéÌí¼Óµ½µ±Ç°²ãÖÐ¡£
+//    spriteA->setPosition(177, 100);//è®¾ç½®è¿™ä¸ªç²¾çµåœ¨å±å¹•çš„ä½ç½®
+//    this->addChild(spriteA);//æŠŠè¿™ä¸ªç²¾çµæ·»åŠ åˆ°å½“å‰å±‚ä¸­ã€‚
 //
 //    auto listener1 = EventListenerTouchOneByOne::create();
 //    listener1->setSwallowTouches(true);
@@ -136,87 +139,112 @@ bool MySecondScene::init()
 	{
 		return false;
 	}
-	  // 1. super init first
-    /*if (!MySecondScene::init())
-    {
-        return false;
-    }*/
-    //Size VisibleSize = Director::getInstance()->getVisibleSize();
+
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    //background
-    auto sprite = Sprite::create("res\\map\\map.png");
-    if (sprite == nullptr)
+
+    PlayerBoard* b1 = new PlayerBoard;
+    PlayerBoard* b2 = new PlayerBoard;
+
+    Player* p1 = new Player;
+    Player* p2 = new Player;
+
+    p1->setPlayerBoard(b1);
+    b1->setPlayer(p1);
+
+    //create the sprite of b1
+    auto sprite1 = Sprite::create("res\\map\\map.png");
+
+    //set the sprite of b1
+    b1->setMap(sprite1);
+
+    //add the sprite of b1 scene
+    b1->setBoardScene(this);
+    this->setBoard(b1);
+  
+    this->addChild(b1->getMap());
+    if (sprite1 == nullptr)
     {
-        problemLoading("'res\\map.png'");
+        problemLoading("'res\\map\\map.png'");
     }
     else
     {
         // position the sprite on the center of the screen
-        sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+        sprite1->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 
         // add the sprite as a child to this layer
-        this->addChild(sprite, 0);
     }
-    auto spriteA = Sprite::create("res\\model\\CG.png");
-    spriteA->setScale(2);
-    spriteA->setPosition(177, 100);//ÉèÖÃÕâ¸ö¾«ÁéÔÚÆÁÄ»µÄÎ»ÖÃ
-    this->addChild(spriteA);//°ÑÕâ¸ö¾«ÁéÌí¼Óµ½µ±Ç°²ãÖÐ¡£
 
-    auto listener1 = EventListenerTouchOneByOne::create();
-    listener1->setSwallowTouches(true);
+    
 
-    listener1->onTouchBegan = [](Touch* touch, Event* event) {
-        auto target = static_cast<Sprite*>(event->getCurrentTarget());
-        Point locationInNode = target->convertToNodeSpace(touch->getLocation());
-        Size s = target->getContentSize();
-        Rect rect = Rect(0, 0, s.width, s.height);
 
-        if (rect.containsPoint(locationInNode))
+
+    ChessWithSprite* C = new  ChessWithSprite(ChessWithSprite::ChessType::Axe);
+  
+
+   
+
+    //create the playerSprite
+    auto spritetrans = Sprite::create("res\\shop.png");
+
+    //setItsopacity
+    spritetrans->setOpacity(0);
+
+    //set player Sprite
+    p1->setSprite(spritetrans);
+
+    b1->getMap()->addChild(p1->getSprite());
+
+    //add chessReverse into Player
+    for (int i = 0; i < 5; i++)
+    {
+        p1->getSprite()->addChild(p1->getReserve(i)->getSprite());
+    }
+
+    this->setPlayer(p1);  
+
+    p1->setHp(100);
+    p2->setHp(100);
+    p1->setExp(0);
+    p2->setExp(0);
+    p1->setGold(1000);
+    p2->setGold(10);
+    p1->setPlayerRank(1);
+    p2->setPlayerRank(2);
+    p1->setLevel(1);
+    p2->setLevel(1);
+
+    p2->setPlayerBoard(b2);
+    b2->setPlayer(p2);
+
+
+    p1->openShop();
+    for (int i = 0; i < 8; i++)
+        for (int k = 0; k < 8; k++)
         {
-            //log("sprite began... x = %f, y = %f", locationInNode.x, locationInNode.y);
-            target->setOpacity(160);
-            return true;
+            auto chessSprite = b1->getChess(k, i)->getSprite();
+            Point ppos;
+            ppos.x = 177 + 16 * i;
+            ppos.y = 100 + 16 * k;
+            chessSprite->setPosition(ppos);
+            b1->getMap()->addChild(chessSprite, 3);
         }
-        return false;
-    };
-    listener1->onTouchMoved = [](Touch* touch, Event* event) {
-        auto target = static_cast<Sprite*>(event->getCurrentTarget());
-        target->setPosition(target->getPosition() + touch->getDelta());
-        //pos = touch->getLocation() + touch->getDelta();
+    b1->setChess(0, 0, C);
+    if (b1->getChess(0, 0)->getSprite()->getChildrenCount())
+        b1->getChess(0, 0)->getSprite()->getChildren().at(0)->setScale(2);
+   // FightBoard fb;
+  //  fb.init(p1, p2);
+  //  fb.getBoardScene();
+  
 
-    };
-    listener1->onTouchEnded = [=](Touch* touch, Event* event) {
-        auto target = static_cast<Sprite*>(event->getCurrentTarget());
-        pos = touch->getLocation() + touch->getDelta();
-        if (pos.y < 92.0) {
-            posA.x = max(172, min(300, 172 + (int)(pos.x - 164) / 16 * 16));
-            posA.y = 76;
-        }
-        else {
-            posA.x = max(177, min(289, 177 + (int)(pos.x - 169) / 16 * 16));
-            posA.y = max(100, min(148, 100 + (int)(pos.y - 92) / 16 * 16));
-            int x, y;
-            x = (posA.x - 177) / 16;
-            y = (posA.y - 100) / 16;
-        }   
-        target->setPosition(posA.x, posA.y);
-        target->setOpacity(255);
-    };
-
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, spriteA);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1->clone(), spriteA);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1->clone(), spriteA);
-
-    Director::getInstance()->pause();
 	return true;
-   }
+}
 
 
 void MySecondScene::EnterFirstScene(Ref* pSender)
 {
-	//Ìø×ªµ½µÚÒ»¸ö³¡¾°£¬¼ÇµÃ°üº¬µÚÒ»¸ö³¡¾°µÄÍ·ÎÄ¼þ£ºMyFirstScene.h
+	//è·³è½¬åˆ°ç¬¬ä¸€ä¸ªåœºæ™¯ï¼Œè®°å¾—åŒ…å«ç¬¬ä¸€ä¸ªåœºæ™¯çš„å¤´æ–‡ä»¶ï¼šMyFirstScene.h
 	Director::getInstance()->replaceScene(MyFirstScene::createScene());
 }
 void MySecondScene::menuCloseCallback(Ref* pSender)
@@ -229,3 +257,136 @@ void MySecondScene::menuCloseCallback(Ref* pSender)
     //EventCustom customEndEvent("game_scene_close_event");
     //_eventDispatcher->dispatchEvent(&customEndEvent);
 }
+
+//myadd
+void MySecondScene::moveChess()
+{
+    auto listener1 = EventListenerTouchOneByOne::create();
+    listener1->setSwallowTouches(true);
+
+    listener1->onTouchBegan = [this](Touch* touch, Event* event) {
+        targetA = static_cast<Sprite*>(event->getCurrentTarget());
+        pos_org = targetA->getPosition();
+        if (pos_org.x < 92.0) {
+            x_org = (pos_org.x - 172) / 16;
+            y_org = 0;
+        }
+        else {
+            x_org = (pos_org.x - 177) / 16;
+            y_org = (pos_org.y - 100) / 16;
+        }
+        Point locationInNode = targetA->convertToNodeSpace(touch->getLocation());
+        Size s = targetA->getContentSize();
+        Rect rect = Rect(0, 0, s.width, s.height);
+
+        if (rect.containsPoint(locationInNode))
+        {
+            //log("sprite began... x = %f, y = %f", locationInNode.x, locationInNode.y);
+            targetA->setOpacity(160);
+            return true;
+        }
+        return false;
+    };
+    listener1->onTouchMoved = [this](Touch* touch, Event* event) {
+        targetA = static_cast<Sprite*>(event->getCurrentTarget());
+        targetA->setPosition(targetA->getPosition() + touch->getDelta());
+        //pos = touch->getLocation() + touch->getDelta();
+
+    };
+    listener1->onTouchEnded = [=](Touch* touch, Event* event) {
+        targetA = static_cast<Sprite*>(event->getCurrentTarget());
+        pos = touch->getLocation() + touch->getDelta();
+        if (pos.y < 92.0) {
+            posA.x = max(172, min(300, 172 + (int)(pos.x - 164) / 16 * 16));
+            posA.y = 76;
+            x = (posA.x - 172) / 16;
+            y = 0;
+        }
+        else {
+            posA.x = max(177, min(289, 177 + (int)(pos.x - 169) / 16 * 16));
+            posA.y = max(100, min(148, 100 + (int)(pos.y - 92) / 16 * 16));
+            //int x, y;
+            x = (posA.x - 177) / 16;
+            y = (posA.y - 100) / 16;
+            
+        }        
+        //æ£‹å­ç§»åŠ¨ä¸Žé‡å å›žé€€
+        if (y_org == 0 && y == 0) {
+            if (this->getPlayer()->getReserve(x)->getChessType() == ChessWithSprite::ChessType::noChess) {
+                targetA->setPosition(posA);
+                this->getPlayer()->getReserve(x_org)->changeChessToOtherChess(this->getPlayer()->getReserve(x));
+            }
+            else {
+                targetA->setPosition(pos_org);
+            }
+        }
+        else if (y_org != 0 && y == 0) {
+            if (this->getPlayer()->getReserve(x)->getChessType() == ChessWithSprite::ChessType::noChess) {
+                targetA->setPosition(posA);               
+                this->getPlayer()->getPlayerBoard()->getChess(x_org, y_org)
+                    ->changeChessToOtherChess(this->getPlayer()->getReserve(x));
+            }
+            else {
+                targetA->setPosition(pos_org);
+            }
+        }
+        else if (y_org == 0 && y != 0) {
+            if (this->getBoard()->getChess(x, y)
+                ->getChessType() == ChessWithSprite::ChessType::noChess) {
+                targetA->setPosition(posA);
+                this->getPlayer()->getReserve(x_org)->changeChessToOtherChess
+                (this->getPlayer()->getPlayerBoard()->getChess(x, y));
+            }
+            else {
+                targetA->setPosition(pos_org);
+            }
+        }
+        else {
+            if (this->getPlayer()->getPlayerBoard()->getChess(x, y)
+                ->getChessType() == ChessWithSprite::ChessType::noChess) {
+                targetA->setPosition(posA);
+                this->getPlayer()->getPlayerBoard()->getChess(x_org, y_org)->changeChessToOtherChess
+                (this->getPlayer()->getPlayerBoard()->getChess(x, y));
+            }
+            else {
+                targetA->setPosition(pos_org);
+            }
+        }
+
+        targetA->setOpacity(255);       
+    };
+
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
+    //_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1->clone(), targetA);
+    //_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1->clone(), targetA);
+}
+
+Player* MySecondScene::getPlayer()
+{
+    return this->player;
+}
+
+void MySecondScene::setPlayer(Player* toSet)
+{
+    this->player = toSet;
+}
+
+PlayerBoard* MySecondScene::getBoard()
+{
+    return this->board;
+}
+
+void MySecondScene::setBoard(PlayerBoard* toSet)
+{
+    this->board = toSet;
+}
+
+//MySecondScene* MySecondScene::getScene()
+//{
+//    return this->scene;
+//}
+//
+//void MySecondScene::setScene(MySecondScene* toSet)
+//{
+//    this->scene = toSet;
+//}
