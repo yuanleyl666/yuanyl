@@ -153,6 +153,9 @@ bool MySecondScene::init()
     p1->setPlayerBoard(b1);
     b1->setPlayer(p1);
 
+    //create the scene of p1
+    p1->setSecondScene(this);
+
     //create the sprite of b1
     auto sprite1 = Sprite::create("res\\map\\map.png");
 
@@ -161,9 +164,11 @@ bool MySecondScene::init()
 
     //add the sprite of b1 scene
     b1->setBoardScene(this);
+
     this->setBoard(b1);
   
-    this->addChild(b1->getMap());
+    //this->addChild(b1->getMap());
+ 
     if (sprite1 == nullptr)
     {
         problemLoading("'res\\map\\map.png'");
@@ -171,37 +176,36 @@ bool MySecondScene::init()
     else
     {
         // position the sprite on the center of the screen
+        //sprite1->setAnchorPoint(Vec2(0,0));
+        //sprite1->setScaleX(1.7);
         sprite1->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 
         // add the sprite as a child to this layer
     }
-
-    
-
+    this->addChild(sprite1);
 
 
-    ChessWithSprite* C = new  ChessWithSprite(ChessWithSprite::ChessType::Axe);
-  
 
-   
+
 
     //create the playerSprite
-    auto spritetrans = Sprite::create("res\\shop.png");
-
-    //setItsopacity
-    spritetrans->setOpacity(0);
+    auto spritetrans = Sprite::create("res\\atk.png");
+    spritetrans->setPosition(Vec2(100, 100));
+    //spritetrans->setOpacity(0);
 
     //set player Sprite
     p1->setSprite(spritetrans);
 
-    b1->getMap()->addChild(p1->getSprite());
-
+    this->addChild(p1->getSprite());
+    
     //add chessReverse into Player
     for (int i = 0; i < 5; i++)
     {
-        p1->getSprite()->addChild(p1->getReserve(i)->getSprite());
+        if (p1->getReserve(i)->getSprite() != nullptr)
+        this->addChild(p1->getReserve(i)->getSprite());
+        //p1->getSprite()->addChild(p1->getReserve(i)->getSprite());
     }
-
+    
     this->setPlayer(p1);  
 
     p1->setHp(100);
@@ -218,21 +222,15 @@ bool MySecondScene::init()
     p2->setPlayerBoard(b2);
     b2->setPlayer(p2);
 
+    ChessWithSprite* C = new  ChessWithSprite(ChessWithSprite::ChessType::Axe);
+    b1->setChess(6, 6, C);
+
+    b1->getChess(6, 6)->getSprite()->setScale(2);
 
     p1->openShop();
-    for (int i = 0; i < 8; i++)
-        for (int k = 0; k < 8; k++)
-        {
-            auto chessSprite = b1->getChess(k, i)->getSprite();
-            Point ppos;
-            ppos.x = 177 + 16 * i;
-            ppos.y = 100 + 16 * k;
-            chessSprite->setPosition(ppos);
-            b1->getMap()->addChild(chessSprite, 3);
-        }
-    b1->setChess(0, 0, C);
-    if (b1->getChess(0, 0)->getSprite()->getChildrenCount())
-        b1->getChess(0, 0)->getSprite()->getChildren().at(0)->setScale(2);
+    
+
+    
    // FightBoard fb;
   //  fb.init(p1, p2);
   //  fb.getBoardScene();
