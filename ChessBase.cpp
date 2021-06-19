@@ -124,3 +124,25 @@ bool ChessBase::attack(ChessBase* targetChess)
     this->MP += 10;
     return 1;
 }
+bool ChessBase::equip(const int& equipment)
+{
+    if (equipment == 1)//狂徒铠甲
+    {
+        this->setHP(this->getHP() + 200);
+    }
+    else if (equipment == 2)//狂风之力
+    {
+        this->setAT(this->getAT() + 15);
+    }
+    else if (equipment == 3)//荆棘之甲
+    {
+        this->setMR(this->getMR() + 15);
+    }
+    else //三相之力
+    {
+        this->setHP(this->getHP() + 67);
+        this->setAT(this->getAT() + 5);
+        this->setMR(this->getMR() + 5);
+    }
+    return true;
+}
