@@ -1,42 +1,50 @@
 #pragma once
 #include "ui/CocosGUI.h"
 #include "ChessBase.h"
-#include"Menu//myMenu.h"
+#include"myMenu.h"
 #include"ChessWithSprite.h"
-#include"Player.h"
+#include"PlayerBoard.h"
+#include "Shop.h"
 using namespace cocos2d;
-class ChessWithSprite;
-class Player;
-class Shop
+class Shop;
+class PlayerBoard;
+
+class Player
 {
-
 private:
-    Player* whoOpenThis;
-    Sprite* shopSprite;
-    ChessWithSprite ChessLibrary[5];
+    int playerRank;
+    int exp;
+    int level;
+    int gold;
+    int hp;
+    ChessWithSprite ChessReserve[5];
+private:
+    Sprite* PlayerSprite;
+    PlayerBoard* board;
+    Shop* ShopOpened;
 public:
-    //根据player的等级等初始化shop
-    friend void shopUpDate(Shop* shop)
-    {
-        auto player = shop->getPlayer();
-        shop->closeShop();
-        Shop* _shop = new Shop(player);
-        player->getSprite()->addChild(shop->getSprite(), 0, 1);
-    }
-    Shop(Player* player);
+    const int getPlayerRank()const;
+    const int getExp()const;
+    const int getLevel()const;
+    const int getGold()const;
+    const int getHp()const;
+    Sprite* getSprite()const;
+    ChessWithSprite* getReserve(const int i);
+    Shop* getShop();
+    PlayerBoard* getPlayerBoard();
 
-    Sprite* getSprite()
-    {
-        return this->shopSprite;
-    }
+    bool setReserve(const int i, ChessWithSprite*);
+    bool setPlayerRank(const int playerRank);
+    bool setExp(const int Exp);
+    bool setLevel(const int Level);
+    bool setGold(const int Gold);
+    bool setHp(const int Hp);
+    bool setSprite(Sprite* sp);
+    void setPlayerBoard(PlayerBoard* toSet);
+    void setShop(Shop* shop);
 
-    void setSprite(Sprite*);
-    ///买棋子
-    bool buyChess(const int i);
-    //ui关闭商店,同时断开商店和player的指针
-    void closeShop();
+    void openShop();
 
-    Player* getPlayer();
 
-    void setPlayer(Player*);
+
 };
