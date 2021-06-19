@@ -3,11 +3,11 @@ using namespace cocos2d;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-myMenu* PlayerBoard::getBoardScene()
+Scene* PlayerBoard::getBoardScene()
 {
     return this->boardScene;
 }
-void PlayerBoard::setBoardScene(myMenu* toSet)
+void PlayerBoard::setBoardScene(Scene* toSet)
 {
     this->boardScene = toSet;
 }
