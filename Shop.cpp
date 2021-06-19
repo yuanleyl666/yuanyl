@@ -5,51 +5,87 @@ using namespace cocos2d;
 Shop::Shop(Player* player)
 {
     this->whoOpenThis = player;
-
-    for (int i = 0; i < 5; i++)
-    {
-        int rate = random() % 100;
-        //¾ßÌåÄ³ÖÖÆå×Ó
-        if (rate < 1)
-        {
-            ChessLibrary[i].setChessType(ChessWithSprite::ChessType::firstType);
-            ChessLibrary[i].init();
-        }
-    }
-
+    this->setSprite(Sprite::create("res\\shop.png"));
+    this->getSprite()->setPosition(100, 50);
     player->setShop(this);
-    //ÉèÖÃuiºÍ°´Å¥
-    //´´½¨ÉÌµêµÄ´óÍâ¿ò
-    this->setSprite(Sprite::create("Í¼Æ¬Ãû"));
-    //ÔÚÉÌµêÖĞ·Ö±ğ·ÅÖÃ¾«Áé£»
+    player->getSprite()->addChild(this->getSprite());
+
+
+    static int pool[21] = { 0,20,20,20,20,20,20,20,20,20,15,15,15,15,15,15,10,10,10,10,10 };//é»˜è®¤å¡æ± å‚æ•°
+
     for (int i = 0; i < 5; i++)
     {
-        //ÉèÖÃÆå×Ó¾«Áé
-        auto chessSprite = this->ChessLibrary[0].getSprite();
-        //°ÑchessSpriteÏÔÊ¾ÉÏÈ¥
+        int draw;//æŠ½å–åˆ°çš„æ£‹å­ï¼ˆæ ‡å·ï¼‰
+        int rate = 1 + rand() % 100;
+        const int Rate[4][10] = { {100,70 ,60, 50, 40, 30, 25, 20,15,10},//å„ç­‰çº§æŠ½å–æ£‹å­æ¦‚ç‡
+                                  {100,100,90, 80, 70, 65, 55, 50,35,25},
+                                  {100,100,100,95, 90, 85, 80, 80,60,50},
+                                  {100,100,100,100,100,95, 90, 85,80,75} };
+        if (rate <= Rate[0][whoOpenThis->getLevel() - 1])
+        {
+            draw = 1 + rand() % 5;
+        }
+        else if (rate <= Rate[1][whoOpenThis->getLevel() - 1])
+        {
+            draw = 6 + rand() % 4;
+        }
+        else if (rate <= Rate[2][whoOpenThis->getLevel() - 1])
+        {
+            draw = 10 + rand() % 3;
+        }
+        else if (rate <= Rate[3][whoOpenThis->getLevel() - 1])
+        {
+            draw = 13 + rand() % 3;
+        }
+        else
+        {
+            draw = 16 + rand() & 5;
+        }
+        pool[draw]--;//å¡æ± æ•°å‡ä¸€
+        ChessLibrary[i].setChessType(ChessWithSprite::ChessType::Axe);
+        ChessLibrary[i].init();
+    }
+ 
+    //è®¾ç½®uiå’ŒæŒ‰é’®
+    //åˆ›å»ºå•†åº—çš„å¤§å¤–æ¡†
+    
+    //åœ¨å•†åº—ä¸­åˆ†åˆ«æ”¾ç½®ç²¾çµï¼›
+    for (int i = 0; i < 5; i++)
+    {
+        Sprite* chessSprite = nullptr;
+        //è®¾ç½®æ£‹å­ç²¾çµ
+        if (this->ChessLibrary[i].getSprite()->getChildrenCount())
+        {
+            chessSprite = static_cast<Sprite * >(this->ChessLibrary[i].getSprite()->getChildByTag(0));
+        }
+        else
+        {
+            chessSprite = this->ChessLibrary[i].getSprite();
+        }
+        //æŠŠchessSpriteæ˜¾ç¤ºä¸Šå»
         chessSprite->setPosition(Vec2(i * 100, 200));
 
-        //ÉèÖÃ°´Å¥£¬²»Ò»¶¨·ÇÒªÊÇ¾«Áé£¬¿ÉÒÔÊÇÆäËûÀà£¬Ö»ÒªÄÜµ÷ÓÃ¹ºÂò¾ÍĞĞ
-        //ÏÔÊ¾¡¢ÉèÖÃµã»÷ÊÂ¼ş£¬µã»÷µ÷ÓÃthis-¡·buychess£¨i£©
-         //´´½¨button¶ÔÏó
+        //è®¾ç½®æŒ‰é’®ï¼Œä¸ä¸€å®šéè¦æ˜¯ç²¾çµï¼Œå¯ä»¥æ˜¯å…¶ä»–ç±»ï¼Œåªè¦èƒ½è°ƒç”¨è´­ä¹°å°±è¡Œ
+        //æ˜¾ç¤ºã€è®¾ç½®ç‚¹å‡»äº‹ä»¶ï¼Œç‚¹å‡»è°ƒç”¨this-ã€‹buychessï¼ˆiï¼‰
+         //åˆ›å»ºbuttonå¯¹è±¡
         auto buyButton = Sprite::create("res\\shop\\BH_SHOP.png");
 
-        //ÉèÖÃbtnµÄÎ»ÖÃ
+        //è®¾ç½®btnçš„ä½ç½®
         buyButton->setPosition(Vec2(300, 200));
 
-        this->getPlayer()->getPlayerBoard()->getBoardScene()->addChild(buyButton, 1);
+        this->getSprite()->addChild(buyButton, 1);
         auto listener1 = EventListenerTouchOneByOne::create();
-        listener1->setSwallowTouches(true);//ÉèÖÃÊÂ¼şÍÌÃ»£¬±ÜÃâÁËÏÂÓÎµÄÆäËü¼àÌıÆ÷»ñÈ¡µ½´ËÊÂ¼ş
+        listener1->setSwallowTouches(true);//è®¾ç½®äº‹ä»¶åæ²¡ï¼Œé¿å…äº†ä¸‹æ¸¸çš„å…¶å®ƒç›‘å¬å™¨è·å–åˆ°æ­¤äº‹ä»¶
         // trigger when you push down
         listener1->onTouchBegan = [=](Touch* touch, Event* event) {
             auto target = static_cast<Sprite*>(event->getCurrentTarget());
 
             Point pos = Director::getInstance()->convertToGL(touch->getLocationInView());
 
-            /* ÅĞ¶Ïµã»÷µÄ×ø±êÊÇ·ñÔÚ¾«ÁéµÄ·¶Î§ÄÚ */
+            /* åˆ¤æ–­ç‚¹å‡»çš„åæ ‡æ˜¯å¦åœ¨ç²¾çµçš„èŒƒå›´å†… */
             if (target->getBoundingBox().containsPoint(pos))
             {
-                /* ÉèÖÃ¾«ÁéµÄÍ¸Ã÷¶ÈÎª100 */
+                /* è®¾ç½®ç²¾çµçš„é€æ˜åº¦ä¸º100 */
                 target->setOpacity(0);
                 return true;
             }
@@ -59,9 +95,9 @@ Shop::Shop(Player* player)
         // trigger when you let up
         listener1->onTouchEnded = [](Touch* touch, Event* event) {
             // your code
-            CCLOG("½øÈëended");
+            CCLOG("è¿›å…¥ended");
         };
-        /* ×¢²á¼àÌıÊÂ¼ş£¬°ó¶¨¾«Áé1 */
+        /* æ³¨å†Œç›‘å¬äº‹ä»¶ï¼Œç»‘å®šç²¾çµ1 */
         this->getPlayer()->getPlayerBoard()->getBoardScene()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener1, buyButton);
 
         //
@@ -70,10 +106,10 @@ Shop::Shop(Player* player)
 
 
     }
-    //ÉèÖÃ¹Ø±Õ°´Å¥
-    auto closeButton = Sprite::create("¹Ø±Õ");
-    this->getSprite()->addChild(closeButton, 0, -1);
-    //ÉèÖÃÊÂ¼ş£¬µã»÷µ÷ÓÃcloseShop£¨£©
+    //è®¾ç½®å…³é—­æŒ‰é’®
+    auto closeButton = Sprite::create("å…³é—­");
+    this->getSprite()->addChild(closeButton);
+    //è®¾ç½®äº‹ä»¶ï¼Œç‚¹å‡»è°ƒç”¨closeShopï¼ˆï¼‰
 
 }
 
@@ -95,19 +131,21 @@ bool Shop::buyChess(const int rank)
         {
 
             reseverIsFull = 0;
-
+            //æ‰£é™¤ç©å®¶é‡‘å¸
             this->whoOpenThis->setGold(this->whoOpenThis->getGold() - this->ChessLibrary[rank].getPrice());
-            this->ChessLibrary[rank].changeChessToOtherChess(this->whoOpenThis->getReserve(i));
-            //ui
 
+            //ui        ä¸ä¸€å®šéœ€è¦
             //
+            //
+
+
+            this->ChessLibrary[rank].changeChessToOtherChess(this->whoOpenThis->getReserve(i));
             break;
         }
     }
     if (reseverIsFull)
         return 0;
-    //¿Û³ıÍæ¼Ò½ğ±Ò
-
+  
     return 1;
 }
 void Shop::closeShop()
@@ -115,9 +153,8 @@ void Shop::closeShop()
     this->whoOpenThis->getSprite()->removeAllChildren();
     this->whoOpenThis->setShop(nullptr);
     this->whoOpenThis = nullptr;
-    //ui¹Ø±ÕÉÌµê½çÃæ
-    //
-    delete this;
+    //uiå…³é—­å•†åº—ç•Œé¢
+
 }
 
 
@@ -128,4 +165,18 @@ Player* Shop::getPlayer()
 void Shop::setPlayer(Player* toSet)
 {
     this->whoOpenThis = toSet;
+}
+
+void shopUpDate(Shop* shop)
+{
+    auto player = shop->getPlayer();
+    shop->closeShop();
+    CC_SAFE_DELETE(shop);
+    Shop* _shop = new Shop(player);
+    player->getSprite()->addChild(shop->getSprite(), 0, 1);
+}
+
+Sprite* Shop::getSprite()
+{
+    return this->shopSprite;
 }
