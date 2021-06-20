@@ -1,16 +1,16 @@
 #pragma once
-#include "cocos2d.h"					//°üº¬Í·ÎÄ¼ş
+#include "cocos2d.h"					//åŒ…å«å¤´æ–‡ä»¶
 
-using namespace cocos2d;				//Ê¹ÓÃcocos2dÃüÃû¿Õ¼ä
+using namespace cocos2d;				//ä½¿ç”¨cocos2då‘½åç©ºé—´
 
-class MyFirstScene : public Layer		//ĞÂ½¨Ò»¸öÀà£¬¼Ì³Ğ²ã£¨Layer£©
+class MyThirdScene : public Layer		//æ–°å»ºä¸€ä¸ªç±»ï¼Œç»§æ‰¿å±‚ï¼ˆLayerï¼‰
 {
 public:
-    static Scene* createScene();		//MyFirstScene³¡¾°´´½¨ÊµÏÖ
+    static Scene* createScene();		//MyFirstSceneåœºæ™¯åˆ›å»ºå®ç°
 
-    virtual bool init();				//MyFirstScene²ãµÄ³õÊ¼»¯
+    virtual bool init();				//MyFirstSceneå±‚çš„åˆå§‹åŒ–
 
-    CREATE_FUNC(MyFirstScene);			//´´½¨MyFirstSceneµÄCreate·½·¨
+    CREATE_FUNC(MyThirdScene);			//åˆ›å»ºMyFirstSceneçš„Createæ–¹æ³•
 
-    void EnterSecondScene(Ref* pSender);	//´´½¨Ò»¸ö²Ëµ¥»Øµ÷º¯Êı£¬ÕâÀïÊµÏÖÁË³¡¾°µÄÌø×ª
+    void EnterSecondScene(Ref* pSender);	//åˆ›å»ºä¸€ä¸ªèœå•å›è°ƒå‡½æ•°ï¼Œè¿™é‡Œå®ç°äº†åœºæ™¯çš„è·³è½¬
 };
