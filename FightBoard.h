@@ -22,13 +22,14 @@ public:
         if (this->chess[yInit][xInit].getChessType() == ChessWithSprite::ChessType::noChess)
             return;
         this->chess[yInit][xInit].changeChessToOtherChess(&this->chess[yAim][xAim]);
-        double distance = 16.0f;
-        auto operateSprite = this->chess[yAim][xAim].getSprite()->getChildByTag(0);
+        double distance = 16;
+        auto operateSprite = this->chess[yAim][xAim].getSprite() ;
         operateSprite->setPosition(operateSprite->getPositionX() - (xAim - xInit), operateSprite->getPositionY() - (yAim - yInit));
         // Move a sprite to a specific location over 2 seconds.
         auto moveTo = MoveTo::create(2, Vec2(xAim - xInit, yAim - yInit));
         operateSprite->runAction(moveTo);
     }
+
     //
     void fight()
     {
@@ -95,7 +96,7 @@ public:
                 MapSprite->addChild(chess[i][k].getSprite());
                 auto chessSprite = chess[i][k].getSprite();
                 chessSprite->setScale(0.12, 0.12);
-                auto move = MoveTo::create(0, Vec2(20.0f + k * 25.0f, 50.0f + i * 25.0f));
+                auto move = MoveTo::create(0, Vec2(20 + k * 25, 50 + i * 25));
                 chessSprite->runAction(move);
             }
 
