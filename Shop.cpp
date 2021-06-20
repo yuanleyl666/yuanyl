@@ -30,9 +30,9 @@ Shop::Shop(Player* player)
     //this->getSprite()->setIgnoreAnchorPointForPosition(1);
     //this->getSprite()->setAnchorPoint(Vec2(0,0));
     //this->getPlayer()->getSecondScene()->addChild(this->getSprite());
-    this->getSprite()->setPosition(Vec2(190, 10));
+    this->getSprite()->setPosition(Vec2(240, 40));
       
-    player->getSprite()->addChild(this->getSprite(),1);
+    player->getSecondScene()->addChild(this->getSprite(),1);
     
     static int pool[21] = { 0,20,20,20,20,20,20,20,20,20,15,15,15,15,15,15,10,10,10,10,10 };//默认卡池参数
 
@@ -66,9 +66,9 @@ Shop::Shop(Player* player)
         }
         pool[draw]--;//卡池数减一
 
-        ChessLibrary[i].setChessType(ChessWithSprite::ChessType::Axe);
+        ChessLibrary[i].setChessType(static_cast<ChessWithSprite::ChessType>(draw));
 
-        ChessLibrary[i].initInShop(1);
+        ChessLibrary[i].initInShop(draw);
     }
   
     //设置ui和按钮
@@ -92,60 +92,64 @@ Shop::Shop(Player* player)
         //chessSprite->setAnchorPoint(Vec2(0, 0));
         chessSprite->setScale(0.6);
         chessSprite->setPosition(Vec2(i * 40+160, 40));
-       
+       //i * 40+160, 40
 
         this->getPlayer()->getSecondScene()->addChild(chessSprite, 2);
-
         auto listener1 = EventListenerTouchOneByOne::create();
 
         listener1->setSwallowTouches(true);//设置事件吞没，避免了下游的其它监听器获取到此事件
         
         // trigger when you push down
-        //listener1->onTouchBegan = [&,i](Touch* touch, Event* event) 
-        //{
-        //    
-        //    auto target = static_cast<Sprite*>(event->getCurrentTarget());
+        listener1->onTouchBegan = [&,i](Touch* touch, Event* event) 
+        {
+            
+            auto target = static_cast<Sprite*>(event->getCurrentTarget());
 
-        //    Point pp;
-        //    pp = target->getPosition();
+            Point pp;
+            pp = target->getPosition();
 
-        //    Point pos = Director::getInstance()->convertToGL(touch->getLocationInView());
-        //    log("%d", pp.x);
-        //    log("%d", pp.y);
-        //    /* 判断点击的坐标是否在精灵的范围内 */
-        //    if (target->getBoundingBox().containsPoint(pos))
-        //    {
-        //       
-        //      if(! this->buyChess(i))
-        //          log("sb");
-        //      else  log("bought");
-        //        return true;
-        //    }
-
-        //    return false;
-        //};
-        listener1->onTouchBegan = [i,this](Touch* touch, Event* event) {
-            auto targetA = static_cast<Sprite*>(event->getCurrentTarget());
-            //pos_org = targetA->getPosition();
-           
-            Point locationInNode = targetA->getParent()->convertToNodeSpace(touch->getLocation());
-            Size s = targetA->getContentSize();
-            Rect rect = Rect(0, 0, s.width, s.height);
-            log("Node");
-            log("%d", locationInNode.x);
-            log("%d", locationInNode.y);
-            if (rect.containsPoint(locationInNode))
+            Point pos = Director::getInstance()->convertToGL(touch->getLocationInView());
+            Point pppp = Point(pos.x, pos.y - 57);
+            //Point pos = target->getParent()->convertToNodeSpace(touch->getLocation());
+           /* log("Node");
+            log("%d", pp.x);
+            log("%d", pp.y);
+            log("%d", pos.x);
+            log("%d", pos.y);*/
+            /* 判断点击的坐标是否在精灵的范围内 */
+            if (target->getBoundingBox().containsPoint(pppp))
             {
-                //log("sprite began... x = %f, y = %f", locationInNode.x, locationInNode.y);
-                //targetA->setOpacity(160);
-                if (!this->buyChess(i))
-                    log("sb");
-                else
-                    log("bought");
+               
+              if(! this->buyChess(i))
+                  log("sb");
+              else  log("bought");
                 return true;
             }
+
             return false;
         };
+        //listener1->onTouchBegan = [i,this](Touch* touch, Event* event) {
+        //    auto targetA = static_cast<Sprite*>(event->getCurrentTarget());
+        //    //pos_org = targetA->getPosition();
+        //   
+        //    Point locationInNode = targetA->getParent()->convertToWorldSpaceAR(touch->getLocation());
+        //    Size s = targetA->getContentSize();
+        //    Rect rect = Rect(0, 0, s.width, s.height);
+        //    log("Node");
+        //    log("%d", locationInNode.x);
+        //    log("%d", locationInNode.y);
+        //    if (rect.containsPoint(locationInNode))
+        //    {
+        //        //log("sprite began... x = %f, y = %f", locationInNode.x, locationInNode.y);
+        //        //targetA->setOpacity(160);
+        //        if (!this->buyChess(i))
+        //            log("sb");
+        //        else
+        //            log("bought");
+        //        return true;
+        //    }
+        //    return false;
+        //};
         // trigger when you let up
 
         listener1->onTouchEnded = [](Touch* touch, Event* event) {
@@ -162,6 +166,7 @@ Shop::Shop(Player* player)
 
 
     }
+    //设置刷新按钮
     //设置关闭按钮
     auto updateButton = Sprite::create("res\\shop.png");
     updateButton->setOpacity(0);
@@ -220,43 +225,14 @@ void Shop::setPlayer(Player* toSet)
     this->whoOpenThis = toSet;
 }
 
-void shopUpDate(Shop* shop,int pool[21])
+void shopUpDate(Shop* shop)
 {
-    for (int i = 0; i < 5; i++)
-    {
-        int draw;//抽取到的棋子（标号）
-        int rate = 1 + rand() % 100;
-        const int Rate[4][10] = { {100,70 ,60, 50, 40, 30, 25, 20,15,10},//各等级抽取棋子概率
-                                  {100,100,90, 80, 70, 65, 55, 50,35,25},
-                                  {100,100,100,95, 90, 85, 80, 80,60,50},
-                                  {100,100,100,100,100,95, 90, 85,80,75} };
-        if (rate <= Rate[0][shop->whoOpenThis->getLevel() - 1])
-        {
-            draw = 1 + rand() % 5;
-        }
-        else if (rate <= Rate[1][shop->whoOpenThis->getLevel() - 1])
-        {
-            draw = 6 + rand() % 4;
-        }
-        else if (rate <= Rate[2][shop->whoOpenThis->getLevel() - 1])
-        {
-            draw = 10 + rand() % 3;
-        }
-        else if (rate <= Rate[3][shop->whoOpenThis->getLevel() - 1])
-        {
-            draw = 13 + rand() % 3;
-        }
-        else
-        {
-            draw = 16 + rand() & 5;
-        }
-        pool[draw]--;//卡池数减一
-       
-        shop->ChessLibrary[i].setChessType(static_cast<ChessWithSprite::ChessType>(draw));
-        ChessLibrary[i].initInShop;
-    }
+    auto player = shop->getPlayer();
+    shop->closeShop();
+    delete shop;
+    Shop* _shop = new Shop(player);
+    player->getSprite()->addChild(shop->getSprite(), 2, 1);
 }
-
 Sprite* Shop::getSprite()
 {
     return this->shopSprite;
