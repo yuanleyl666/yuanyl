@@ -107,6 +107,8 @@ ChessWithSprite& ChessWithSprite::operator=(const ChessWithSprite& chess)
     {
 
         this->sprite = Sprite::create(ChessInitData::SpriteInMap[chessType]);
+        //this->sprite->setOpacity(255);
+        this->sprite->setScale(2);
     }
 
     this->attackInterval = chess.attackInterval;
@@ -152,6 +154,7 @@ void ChessWithSprite::init(const int level)
     {
 
         this->sprite = Sprite::create(ChessInitData::SpriteInMap[chessType]);
+        this->sprite->setScale(2);
     }
 
 
