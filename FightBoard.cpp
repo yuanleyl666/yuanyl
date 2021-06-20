@@ -3,44 +3,36 @@ using namespace cocos2d;
 
 void FightBoard::attack(const int xInit, const int yInit, const int xAim, const int yAim)
 {
-    
-
-
-    //需要添加攻击精灵的位置
-
-
+    chess[yInit][xInit].attack(&chess[xAim][yAim]);
     //攻击动画（上侧）
     auto spriteA = Sprite::create("/res/atk.png");
     spriteA->setScale(0.1);
-    spriteA->setPosition(xInit*16.0f, yInit * 16.0f);
+    spriteA->setPosition(100, 100);
     spriteA->setRotation(-70.0f);
     //this->getSprite()->getParent()代表场景的this指针
     this->chess[yInit][xInit].getSprite()->getParent()->addChild(spriteA);
-    auto rotateToA = RotateBy::create(0.475f, -30.0f);
-    auto fadeOut = FadeOut::create(0.05f);
-    auto seqA = Sequence::create(rotateToA, rotateToA->reverse(),fadeOut, nullptr);
+    auto rotateToA = RotateBy::create(0.6f, -30.0f);
+    auto seqA = Sequence::create(rotateToA, rotateToA->reverse(), nullptr);
     //攻击动画（下侧）
     auto spriteB = Sprite::create("/res/atk.png");
     spriteB->setScale(0.1);
-    spriteB->setPosition(xInit * 16.0f, yInit * 16.0f);
+    spriteB->setPosition(100, 100);
     spriteB->setRotation(-15.0f);
     //this->getSprite()->getParent()代表场景的this指针
     this->chess[yInit][xInit].getSprite()->getParent()->addChild(spriteB);
-    auto rotateToB = RotateBy::create(0.475f, 30.0f);
-    auto seqB = Sequence::create(rotateToB, rotateToB->reverse(),fadeOut, nullptr);
+    auto rotateToB = RotateBy::create(0.6f, 30.0f);
+    auto seqB = Sequence::create(rotateToB, rotateToB->reverse(), nullptr);
     //远程攻击
-    auto moveTo = MoveTo::create(0.95f, Vec2(xAim*16.0f, yAim * 16.0f));
+    auto moveTo = MoveTo::create(4, Vec2(300, 300));
     auto emitter = ParticleFire::create();//火焰
-    emitter->setScale(0.15f);
-    emitter->setPosition(xInit*16.0f, yInit * 16.0f);
-    this->chess[yInit][xInit].getSprite()->getParent()->addChild(emitter);
-    auto seqC = Sequence::create(moveTo, fadeOut, nullptr);
+    emitter->setScale(0.15);
+    emitter->setPosition(50, 50);
+    this->chess[yInit][xInit].getSprite()->getParent()->addChild(spriteB);
     // 技能特效
     auto emitter6 = ParticleExplosion::create();//爆炸
     emitter6->setScale(0.5);
-    emitter6->setPosition(xInit * 16.0f, yInit * 16.0f);
-    this->chess[yInit][xInit].getSprite()->getParent()->addChild(emitter6);
-    auto seqD = Sequence::create(moveTo, fadeOut, nullptr);
+    emitter6->setPosition(50, 50);
+    this->chess[yInit][xInit].getSprite()->getParent()->addChild(spriteB);
     //通过chesstype判断攻击类型
     switch (this->chess[yInit][xInit].ChessWithSprite::getChessType())
     {
@@ -57,11 +49,11 @@ void FightBoard::attack(const int xInit, const int yInit, const int xAim, const 
             break;
         case 3:
             //远程攻击
-            emitter->runAction(seqC);
+            emitter->runAction(moveTo);
             break;
         case 4:
             // 技能特效
-            emitter6->runAction(seqD);
+            emitter6->runAction(moveTo);
             break;
     }
     if (chess[xAim][yAim].getHP() < 1e-3)
@@ -69,13 +61,12 @@ void FightBoard::attack(const int xInit, const int yInit, const int xAim, const 
         //加上死亡动画
         chess[xAim][yAim].setChessType(ChessWithSprite::ChessType::noChess);
         chess[xAim][yAim].getSprite()->removeAllChildren();
-        chess[xAim][yAim].init();
+        chess[xAim][yAim].init(1);
         //死亡特效
         auto fadeOut = FadeOut::create(1.0f);
         auto spriteD = Sprite::create();
         spriteD->runAction(fadeOut);
     }
-    chess[yInit][xInit].attack(&chess[xAim][yAim]);
 }
 
 const positionOnMap FightBoard::findNextMove(const int xInBoard, const int yInBoard)
