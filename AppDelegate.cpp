@@ -123,16 +123,16 @@ bool AppDelegate::applicationDidFinishLaunching() {
     }
 
     register_all_packages();
-    // create a scene. it's an autorelease object
-    /*ChessWithSprite C1(ChessWithSprite::ChessType::Axe);
-    ChessWithSprite C2(ChessWithSprite::ChessType::Axe);*/
-  
- 
+
+
+
 
 
     Scene* runscene = MySecondScene::createScene();
     //runscene->addChild(scene);
     director->runWithScene(runscene);
+
+
 
     
 
