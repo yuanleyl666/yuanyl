@@ -3,6 +3,7 @@
 编译说明
 ### 下载本项目repo：
 git clone https://github.com/yuanleyl666/yuanyl
+
 cd yuanyl
 ### 	下载cocos2d-x-4.0，把cocos2d-x-4.0的文件解压并放到cocos2d文件夹中（coco2d中应有cmake, cocos, external等文件夹）；
 ### 	进入yuanyl后使用下列指令编译（需要vs2019和cmake）：
