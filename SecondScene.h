@@ -19,7 +19,7 @@ public:
 	void menuCloseCallback(cocos2d::Ref* pSender);
 
 	//myadd
-	void moveChess();
+	void moveChess(Sprite*);
 	Player* getPlayer();
 	void setPlayer(Player*);
 	PlayerBoard* getBoard();
