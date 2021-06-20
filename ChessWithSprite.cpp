@@ -95,6 +95,22 @@ ChessWithSprite::ChessWithSprite(const ChessWithSprite& chess)
 //just copy number
 ChessWithSprite& ChessWithSprite::operator=(const ChessWithSprite& chess)
 {
+    //chessType = chess.chessType;
+
+
+    //if (this->chessType!=0&&this->sprite != nullptr && this->sprite->getParent()!=nullptr&& int(this->sprite)!=0xFDFDFDFD)
+    //{
+    //    this->sprite->removeFromParent();
+    //    //CC_SAFE_DELETE(this->sprite);
+    //    this->sprite = nullptr;
+    //}
+    //if (this->chessType != noChess)
+    //{
+
+    //    this->sprite = Sprite::create(ChessInitData::SpriteInMap[chessType]);
+    //    //this->sprite->setOpacity(255);
+    //    this->sprite->setScale(2);
+    //}
     chessType = chess.chessType;
 
 
@@ -110,7 +126,6 @@ ChessWithSprite& ChessWithSprite::operator=(const ChessWithSprite& chess)
         //this->sprite->setOpacity(255);
         this->sprite->setScale(2);
     }
-
     this->attackInterval = chess.attackInterval;
 
     player = chess.player;
@@ -148,6 +163,7 @@ void ChessWithSprite::init(const int level)
     if (this->sprite != nullptr)
     {
         this->sprite->removeFromParent();
+        //CC_SAFE_DELETE(this->sprite);
         this->sprite = nullptr;
     }
     if (this->chessType != noChess)
@@ -179,6 +195,7 @@ void ChessWithSprite::initInShop(const int level)
     if (this->sprite != nullptr)
     {
         this->sprite->removeFromParent();
+        CC_SAFE_DELETE(this->sprite);
         this->sprite = nullptr;
     }
     if (this->chessType != noChess)
