@@ -3,11 +3,11 @@ using namespace cocos2d;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-Scene* PlayerBoard::getBoardScene()
+MySecondScene* PlayerBoard::getBoardScene()
 {
     return this->boardScene;
 }
-void PlayerBoard::setBoardScene(Scene* toSet)
+void PlayerBoard::setBoardScene(MySecondScene* toSet)
 {
     this->boardScene = toSet;
 }
@@ -22,14 +22,23 @@ void PlayerBoard::setPlayer(Player* toSet)
 bool PlayerBoard::setChess(const int& row, const int& column, ChessWithSprite* chess)
 {
     ChessBoard::setChess(row, column, chess);
+
     this->chess[row][column].setPlayer(this->player->getPlayerRank());
     return 1;
 }
 PlayerBoard::PlayerBoard()
 {
-
-    //这里需要重新设定scene
-    //
     //设置事件读取
+    //this->getBoardScene()->
+}
 
+//myadd
+Sprite* PlayerBoard::getMap()
+{
+    return this->MapSprite;
+}
+
+void PlayerBoard::setMap(Sprite* sprite)
+{
+    this->MapSprite = sprite;
 }
