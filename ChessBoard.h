@@ -17,7 +17,11 @@ public:
     //set进的chess的精灵需要重新载入；
     virtual bool setChess(const int& row, const int& column, ChessWithSprite* chessToSet)
     {
+        if (this->getChess(row, column)->getChessType() != ChessWithSprite::ChessType::noChess || chessToSet == nullptr)
+            return 0;
         chessToSet->changeChessToOtherChess(&this->chess[row][column]);
+        //this->getChess(row, column)->getSprite()->setPosition(16 * column + 177, 16 * row + 100);
+        /// //////////////////////
         return 1;
     }
 
@@ -29,13 +33,6 @@ struct positionOnMap
 {
     int x = -1;
     int y = -1;
-    positionOnMap& operator=(const positionOnMap& position)
-    {
-        this->x = position.x;
-        this->y = position.y;
-        return *this;
-
-    }
     const bool operator==(const positionOnMap& p)const
     {
         return x == p.x && y == p.y;
