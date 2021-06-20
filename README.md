@@ -8,9 +8,13 @@ cd yuanyl
 ### 	下载cocos2d-x-4.0，把cocos2d-x-4.0的文件解压并放到cocos2d文件夹中（coco2d中应有cmake, cocos, external等文件夹）；
 ### 	进入yuanyl后使用下列指令编译（需要vs2019和cmake）：
 mkdir win32-build
+
 cd win32-build
+
 cmake .. -G "Visual Studio 16 2019" -A win32
+
 cmake --build . --config Release
+
 cd ..
 ###  运行，程序位于win32-build/bin/yuanyl/Release，可进入文件夹后手动打开yuanyl.exe，也可继续在命令行中使用指令：
  win32-build/bin/yuanyl/Release/yuanyl.exe
