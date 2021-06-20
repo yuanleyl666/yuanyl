@@ -44,7 +44,7 @@ bool ChessBase::setRA(const double& ra)
     this->RA = ra;
     return 1;
 }
-bool ChessBase::setAttackInterval(const double& ai)
+bool ChessBase::setAttackInterval(const int& ai)
 {
     if (this == nullptr)
         return 0;
@@ -67,26 +67,8 @@ bool  ChessBase::setPrice(const int& Price)
     this->price = Price;
     return 1;
 }
-bool   ChessBase::setLevel(const int& Level)
 
-{
-    if (this == nullptr)
-        return 0;
-    this->level = Level;
-    return 1;
-}
-bool  ChessBase::setPro(const int& pro)
 
-{
-    if (this == nullptr)
-        return 0;
-    this->Pro = pro;
-    return 1;
-}
-const int ChessBase::getLevel()const
-{
-    return this->level;
-}
 const int ChessBase::getPlayer()const
 {
     return this->player;
@@ -95,7 +77,7 @@ const int  ChessBase::getPrice()const
 {
     return this->price;
 }
-const double ChessBase::getAttackInterval()const
+const int ChessBase::getAttackInterval()const
 {
     return attackInterval;
 }
@@ -130,26 +112,4 @@ bool ChessBase::attack(ChessBase* targetChess)
     targetChess->HP -= (exp(AT - targetChess->AR) > targetChess->HP ? targetChess->HP : exp(AT - targetChess->AR));
     this->MP += 10;
     return 1;
-}
-bool ChessBase::equip(const int& equipment)
-{
-    if (equipment == 1)//狂徒铠甲
-    {
-        this->setHP(this->getHP() + 200);
-    }
-    else if (equipment == 2)//狂风之力
-    {
-        this->setAT(this->getAT() + 15);
-    }
-    else if (equipment == 3)//荆棘之甲
-    {
-        this->setMR(this->getMR() + 15);
-    }
-    else //三相之力
-    {
-        this->setHP(this->getHP() + 67);
-        this->setAT(this->getAT() + 5);
-        this->setMR(this->getMR() + 5);
-    }
-    return true;
 }
