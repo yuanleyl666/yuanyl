@@ -1,18 +1,6 @@
 #include"Shop.h"
 using namespace cocos2d;
-namespace ChessInitData
-{
-    const std::string SpriteInMap[31] = { "","res\\model\\Axe.png","res\\model\\CG.png","res\\model\\BH.png","res\\model\\DR.png","res\\model\\CK.png",
-                                              "res\\model\\MR.png","res\\model\\QoP.png","res\\model\\Jugg.png","res\\model\\TK.png","res\\model\\DS.png",
-                                              "res\\model\\PA.png","res\\model\\TW.png","res\\model\\GG.png","res\\model\\GS.png","res\\model\\DK.png",
-                                              "res\\model\\TA.png","res\\model\\DRK.png","res\\model\\GT.png","res\\model\\TH.png","res\\model\\COCO.png",
-                                              "res\\model\\M1.png","res\\model\\M2.png","res\\model\\M3.png","res\\model\\M4.png","res\\model\\M5.png",
-                                              "res\\model\\M6.png","res\\model\\M7.png","res\\model\\M8.png","res\\model\\M9.png","res\\model\\M10.png" };
-    const std::string SpriteInShop[21] = { "","res\\shop\\Axe_SHOP.png","res\\shop\\CG_SHOP.png","res\\shop\\BH_SHOP.png","res\\shop\\DR_SHOP.png","res\\shop\\CK_SHOP.png",
-                                             "res\\shop\\MR_SHOP.png","res\\shop\\QoP_SHOP.png","res\\shop\\Jugg_SHOP.png","res\\shop\\TK_SHOP.png","res\\shop\\DS_SHOP.png",
-                                             "res\\shop\\PA_SHOP.png","res\\shop\\TW_SHOP.png","res\\shop\\GG_SHOP.png","res\\shop\\GS_SHOP.png","res\\shop\\DK_SHOP.png",
-                                             "res\\shop\\TA_SHOP.png","res\\shop\\DRK_SHOP.png","res\\shop\\GT_SHOP.png","res\\shop\\TH_SHOP.png","res\\shop\\COCO_SHOP.png" };
-}
+
 
 Shop::Shop(Player* player)
 {
