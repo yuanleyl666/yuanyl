@@ -237,7 +237,19 @@ bool MySecondScene::init()
    // FightBoard fb;
   //  fb.init(p1, p2);
   //  fb.getBoardScene();
-  
+
+
+    //切换场景
+    auto label = Label::createWithSystemFont("Go Fight!", "fonts/Marker Felt.ttf", 20);//创建一个标签
+    //菜单条目的创建有多种，之前的HelloWorld.cpp中实现的是图片菜单条目(MenuItemImage)，即根据图片来创建菜单条目
+    //这里是根据标签来创建菜单条目,然后设置回调函数
+    auto menuitem = MenuItemLabel::create(label, CC_CALLBACK_1(MySecondScene::EnterThirdScene, this));
+    menuitem->setPosition(300, 20);//这里的按钮坐标和上面的按钮大小要调整
+    //创建好了菜单条目，就需要加入菜单中，所以下面就是创建菜单
+    auto menu = Menu::create(menuitem, NULL);
+    //把菜单添加到MySecondScene层中
+    this->addChild(menu);
+
 
 	return true;
 }
@@ -350,6 +362,7 @@ void MySecondScene::moveChess(Sprite* sprite)
                     this->getPlayer()->getReserve(x)->getSprite()->scheduleUpdate();
                     this->getPlayer()->getReserve(x)->getSprite()->setVisible(true);
                     this->getPlayer()->getReserve(x)->getSprite()->setOpacity(255);
+                    this->moveChess(this->getPlayer()->getReserve(x)->getSprite());
                 }
             }
             else {
@@ -367,6 +380,7 @@ void MySecondScene::moveChess(Sprite* sprite)
                     this->addChild(this->getPlayer()->getReserve(x)->getSprite(), 3);
                     this->getPlayer()->getReserve(x)->getSprite()->setVisible(true);
                     this->getPlayer()->getReserve(x)->getSprite()->setOpacity(255);
+                    this->moveChess(this->getPlayer()->getReserve(x)->getSprite());
                 }
             }
             else {
@@ -385,6 +399,7 @@ void MySecondScene::moveChess(Sprite* sprite)
                     this->addChild(this->getPlayer()->getPlayerBoard()->getChess(y, x)->getSprite(), 3);
                     this->getPlayer()->getPlayerBoard()->getChess(y, x)->getSprite()->setVisible(true);
                     this->getPlayer()->getPlayerBoard()->getChess(y, x)->getSprite()->setOpacity(255);
+                    this->moveChess(this->getPlayer()->getPlayerBoard()->getChess(y, x)->getSprite());
                 }
             }
             else {
@@ -403,6 +418,7 @@ void MySecondScene::moveChess(Sprite* sprite)
                     this->addChild(this->getPlayer()->getPlayerBoard()->getChess(y, x)->getSprite(), 3);
                     this->getPlayer()->getPlayerBoard()->getChess(y, x)->getSprite()->setVisible(true);
                     this->getPlayer()->getPlayerBoard()->getChess(y, x)->getSprite()->setOpacity(255);
+                    this->moveChess(this->getPlayer()->getPlayerBoard()->getChess(y, x)->getSprite());
                 }
             }
             else {
@@ -413,9 +429,10 @@ void MySecondScene::moveChess(Sprite* sprite)
     };
 
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener1, sprite);
+    //this->getEventDispatcher()->removeEventListener(listener1);
     //_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, sprite);
-    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener1->clone(), sprite);
-    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener1->clone(), sprite);
+    //this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener1->clone(), sprite);
+    //this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener1->clone(), sprite);
     return;
 }
 
@@ -439,6 +456,12 @@ void MySecondScene::setBoard(PlayerBoard* toSet)
     this->board = toSet;
 }
 
+void MySecondScene::EnterThirdScene(Ref* pSender)
+{
+    //跳转到第三个场景，记得包含第一个场景的头文件：MyThirdScene.h
+    Director::getInstance()->replaceScene(MyThirdScene::createScene());
+
+}
 //MySecondScene* MySecondScene::getScene()
 //{
 //    return this->scene;
