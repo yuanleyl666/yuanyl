@@ -189,8 +189,9 @@ bool MySecondScene::init()
 
 
     //create the playerSprite
-    auto spritetrans = Sprite::create("res\\atk.png");
-    spritetrans->setPosition(Vec2(100, 100));
+    auto spritetrans = Sprite::create("res\\tuanzi.png");
+    spritetrans->setScale(0.5);
+    spritetrans->setPosition(Vec2(120, 80));
     //spritetrans->setOpacity(0);
 
     //set player Sprite
@@ -206,6 +207,7 @@ bool MySecondScene::init()
         //p1->getSprite()->addChild(p1->getReserve(i)->getSprite());
     }
     
+
     this->setPlayer(p1);  
 
     p1->setHp(100);
@@ -222,15 +224,16 @@ bool MySecondScene::init()
     p2->setPlayerBoard(b2);
     b2->setPlayer(p2);
 
-    ChessWithSprite* C = new  ChessWithSprite(ChessWithSprite::ChessType::Axe);
-    b1->setChess(6, 6, C);
+    auto c = ChessWithSprite(ChessWithSprite::Axe, 1);
+    b1->setChess(6, 6, &c);
+    this->addChild(b1->getChess(6, 6)->getSprite());
 
-    b1->getChess(6, 6)->getSprite()->setScale(2);
+//    b1->getChess(6, 6)->getSprite()->setScale(2);
 
     p1->openShop();
     
-
-    
+   // for (int i = 1; i <= 10; i++)
+    //    moveChess();
    // FightBoard fb;
   //  fb.init(p1, p2);
   //  fb.getBoardScene();
@@ -257,62 +260,97 @@ void MySecondScene::menuCloseCallback(Ref* pSender)
 }
 
 //myadd
-void MySecondScene::moveChess()
+void MySecondScene::moveChess(Sprite* sprite)
 {
     auto listener1 = EventListenerTouchOneByOne::create();
     listener1->setSwallowTouches(true);
 
-    listener1->onTouchBegan = [this](Touch* touch, Event* event) {
-        targetA = static_cast<Sprite*>(event->getCurrentTarget());
-        pos_org = targetA->getPosition();
-        if (pos_org.x < 92.0) {
-            x_org = (pos_org.x - 172) / 16;
-            y_org = 0;
-        }
-        else {
-            x_org = (pos_org.x - 177) / 16;
-            y_org = (pos_org.y - 100) / 16;
-        }
-        Point locationInNode = targetA->convertToNodeSpace(touch->getLocation());
-        Size s = targetA->getContentSize();
-        Rect rect = Rect(0, 0, s.width, s.height);
+    
+    listener1->onTouchBegan = [&](Touch* touch, Event* event)
+    {
 
-        if (rect.containsPoint(locationInNode))
+        targetA = static_cast<Sprite*>(event->getCurrentTarget());
+        //pos_org = targetA->getAnchorPointInPoints();
+        pos_org = targetA->getPosition();
+        pos == targetA->convertToNodeSpace(touch->getLocation());
+             log("Now");
+                log("%f", pos_org.x);
+                log("%f", pos_org.y);
+                log("%f", pos.x);
+                log("%f", pos.y);
+            if (pos_org.y < 92.0) {
+                x_org = max(0, min(4, (int)(pos_org.x - 164) / 16));
+                y_org = 0;
+            }
+            else {
+                //x_org = max(177, min(289, 177 + (int)(pos_org.x - 169) / 16 * 16));
+                x_org = max(0, min(7, (int)(pos_org.x - 169) / 16));
+                y_org = max(0, min(7, (int)(pos_org.y - 92) / 16));
+                //y_org = max(100, min(148, 100 + (int)(pos_org.y - 92) / 16 * 16));
+            }
+        //Point pp;
+        //pp = target->getPosition();
+
+        Point pss = Director::getInstance()->convertToGL(touch->getLocationInView());
+        Point pppp = Point(pss.x, pss.y - 57);
+        //Point pos = target->getParent()->convertToNodeSpace(touch->getLocation());
+        /* 判断点击的坐标是否在精灵的范围内 */
+        if (targetA->getBoundingBox().containsPoint(pppp))
         {
-            //log("sprite began... x = %f, y = %f", locationInNode.x, locationInNode.y);
-            targetA->setOpacity(160);
+            //targetA->setOpacity(160);
+            
             return true;
         }
+
         return false;
     };
-    listener1->onTouchMoved = [this](Touch* touch, Event* event) {
+    listener1->onTouchMoved = [&](Touch* touch, Event* event) {
         targetA = static_cast<Sprite*>(event->getCurrentTarget());
         targetA->setPosition(targetA->getPosition() + touch->getDelta());
-        //pos = touch->getLocation() + touch->getDelta();
+        //pos = touch->getDelta();
 
     };
-    listener1->onTouchEnded = [=](Touch* touch, Event* event) {
+    listener1->onTouchEnded = [&](Touch* touch, Event* event) {
         targetA = static_cast<Sprite*>(event->getCurrentTarget());
         pos = touch->getLocation() + touch->getDelta();
+        pos.y -= 57.0;
+        //pos = touch->getLocation();
+        //pos= Director::getInstance()->convertToGL(touch->getLocationInView());
+        log("Pos");
+        log("%f", pos.x);
+        log("%f", pos.y);
         if (pos.y < 92.0) {
-            posA.x = max(172, min(300, 172 + (int)(pos.x - 164) / 16 * 16));
+            posA.x = max(172, min(236, 172 + (int)(pos.x - 164) / 16 * 16));
             posA.y = 76;
-            x = (posA.x - 172) / 16;
+            x = (posA.x - 164) / 16;
             y = 0;
         }
         else {
             posA.x = max(177, min(289, 177 + (int)(pos.x - 169) / 16 * 16));
             posA.y = max(100, min(148, 100 + (int)(pos.y - 92) / 16 * 16));
             //int x, y;
-            x = (posA.x - 177) / 16;
-            y = (posA.y - 100) / 16;
+            x = (int)(posA.x - 177) / 16;
+            y = (int)(posA.y - 100) / 16;
             
         }        
+        targetA->setOpacity(255);
+       // log("xy");
+        //log("%d", x);
+        //log("%d", y);
+
         //棋子移动与重叠回退
         if (y_org == 0 && y == 0) {
             if (this->getPlayer()->getReserve(x)->getChessType() == ChessWithSprite::ChessType::noChess) {
-                targetA->setPosition(posA);
+                //targetA->setPosition(posA);
                 this->getPlayer()->getReserve(x_org)->changeChessToOtherChess(this->getPlayer()->getReserve(x));
+                if (this->getPlayer()->getReserve(x)->getSprite() != nullptr)
+                {
+                    this->getPlayer()->getReserve(x)->getSprite()->setPosition(posA);
+                    this->addChild(this->getPlayer()->getReserve(x)->getSprite(), 3);
+                    this->getPlayer()->getReserve(x)->getSprite()->scheduleUpdate();
+                    this->getPlayer()->getReserve(x)->getSprite()->setVisible(true);
+                    this->getPlayer()->getReserve(x)->getSprite()->setOpacity(255);
+                }
             }
             else {
                 targetA->setPosition(pos_org);
@@ -320,43 +358,65 @@ void MySecondScene::moveChess()
         }
         else if (y_org != 0 && y == 0) {
             if (this->getPlayer()->getReserve(x)->getChessType() == ChessWithSprite::ChessType::noChess) {
-                targetA->setPosition(posA);               
-                this->getPlayer()->getPlayerBoard()->getChess(x_org, y_org)
+                //targetA->setPosition(posA);               
+                this->getPlayer()->getPlayerBoard()->getChess(y_org, x_org)
                     ->changeChessToOtherChess(this->getPlayer()->getReserve(x));
+                if (this->getPlayer()->getReserve(x)->getSprite() != nullptr)
+                {
+                    this->getPlayer()->getReserve(x)->getSprite()->setPosition(posA);
+                    this->addChild(this->getPlayer()->getReserve(x)->getSprite(), 3);
+                    this->getPlayer()->getReserve(x)->getSprite()->setVisible(true);
+                    this->getPlayer()->getReserve(x)->getSprite()->setOpacity(255);
+                }
             }
             else {
                 targetA->setPosition(pos_org);
             }
         }
         else if (y_org == 0 && y != 0) {
-            if (this->getBoard()->getChess(x, y)
+            if (this->getBoard()->getChess(y, x)
                 ->getChessType() == ChessWithSprite::ChessType::noChess) {
-                targetA->setPosition(posA);
+                //targetA->setPosition(posA);
                 this->getPlayer()->getReserve(x_org)->changeChessToOtherChess
-                (this->getPlayer()->getPlayerBoard()->getChess(x, y));
+                (this->getPlayer()->getPlayerBoard()->getChess(y, x));
+                if (this->getPlayer()->getPlayerBoard()->getChess(y, x)->getSprite() != nullptr)
+                {
+                    this->getPlayer()->getPlayerBoard()->getChess(y, x)->getSprite()->setPosition(posA);
+                    this->addChild(this->getPlayer()->getPlayerBoard()->getChess(y, x)->getSprite(), 3);
+                    this->getPlayer()->getPlayerBoard()->getChess(y, x)->getSprite()->setVisible(true);
+                    this->getPlayer()->getPlayerBoard()->getChess(y, x)->getSprite()->setOpacity(255);
+                }
             }
             else {
                 targetA->setPosition(pos_org);
             }
         }
-        else {
-            if (this->getPlayer()->getPlayerBoard()->getChess(x, y)
+        else if (y_org != 0 && y != 0) {
+            if (this->getPlayer()->getPlayerBoard()->getChess(y, x)
                 ->getChessType() == ChessWithSprite::ChessType::noChess) {
-                targetA->setPosition(posA);
-                this->getPlayer()->getPlayerBoard()->getChess(x_org, y_org)->changeChessToOtherChess
-                (this->getPlayer()->getPlayerBoard()->getChess(x, y));
+                //targetA->setPosition(posA);
+                this->getPlayer()->getPlayerBoard()->getChess(y_org, x_org)->changeChessToOtherChess
+                (this->getPlayer()->getPlayerBoard()->getChess(y, x));
+                if (this->getPlayer()->getPlayerBoard()->getChess(y, x)->getSprite() != nullptr)
+                {
+                    this->getPlayer()->getPlayerBoard()->getChess(y, x)->getSprite()->setPosition(posA);
+                    this->addChild(this->getPlayer()->getPlayerBoard()->getChess(y, x)->getSprite(), 3);
+                    this->getPlayer()->getPlayerBoard()->getChess(y, x)->getSprite()->setVisible(true);
+                    this->getPlayer()->getPlayerBoard()->getChess(y, x)->getSprite()->setOpacity(255);
+                }
             }
             else {
                 targetA->setPosition(pos_org);
             }
         }
-
-        targetA->setOpacity(255);       
+      
     };
 
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, this);
-    //_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1->clone(), targetA);
-    //_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1->clone(), targetA);
+    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener1, sprite);
+    //_eventDispatcher->addEventListenerWithSceneGraphPriority(listener1, sprite);
+    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener1->clone(), sprite);
+    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener1->clone(), sprite);
+    return;
 }
 
 Player* MySecondScene::getPlayer()
