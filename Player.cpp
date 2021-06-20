@@ -75,6 +75,7 @@ bool Player::setReserve(const int i, ChessWithSprite* toSet)
     //
     this->getReserve(i)->getSprite()->setPosition(Vec2(172 + i * 16, 76));
 
+    this->getSecondScene()->moveChess(this->getReserve(i)->getSprite());
     //
 
 
