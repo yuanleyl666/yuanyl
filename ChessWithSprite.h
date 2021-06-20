@@ -51,9 +51,10 @@ public:
     //把参数的棋子换成调用的棋子并且把调用函数的棋子变为nochess
     bool changeChessToOtherChess(ChessWithSprite* chess)
     {
-        if (this->chessType == noChess || chess->chessType != noChess)
+        if (this->chessType == noChess || chess->chessType != noChess || this == chess)
             return 0;
-
+        //if (chess->chessType != noChess || this == chess)
+        //    return 0;
         *chess = *this;
         this->chessType = noChess;
         this->init();
