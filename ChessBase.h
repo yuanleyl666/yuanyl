@@ -8,7 +8,7 @@ class ChessBase
 
 protected:
 
-
+    int attackInterval = 0;
     int player = 0;
     int price = 0;
     int level = 0;
@@ -20,7 +20,7 @@ protected:
     double AR = 0;//护甲值
     double mR = 0;//削减技能伤害幅度
     double RA = 0;//攻击范围
-    double attackInterval = 0;
+
 public:
 
     bool setHp(const double& hp);
@@ -29,15 +29,14 @@ public:
     bool setAR(const double& ar);
     bool setMR(const double& mr);
     bool setRA(const double& ra);
-    bool setPro(const int&Pro);
-    bool setAttackInterval(const double &ai);
-    bool setPlayer(const int& Player);
-    bool setPrice(const int& Price);
-    bool setLevel(const int& Level);
-    bool equip(const int& equipment)
 
-    const int getLevel()const;
-    const double getAttackInterval()const;
+    bool setAttackInterval(const int& ai);
+
+    bool setPlayer(const int& Player);
+
+    bool setPrice(const int& Price);
+
+    const int getAttackInterval()const;
     const int getPlayer()const;
     const int getPrice()const;
     const double getHP()const;
